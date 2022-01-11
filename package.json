@@ -1,5 +1,5 @@
 {
-  "name": "reactp2p",
+  "name": "reactgraphdb",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
@@ -20,8 +20,10 @@
   "dependencies": {
     "@babel/runtime": "^7.16.7",
     "body-parser": "^1.19.1",
+    "dayjs": "^1.10.7",
     "express": "^4.17.2",
     "gun": "^0.2020.1235",
+    "nanoid": "^3.1.30",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-router-dom": "^6.2.1",

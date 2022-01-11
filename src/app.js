@@ -11,8 +11,7 @@ import { BrowserRouter } from "react-router-dom";
 import IndexPage from './components/indexpage.js';
 
 export default function MyApp(){
-
-  return <BrowserRouter>
+  return <BrowserRouter> 
     <GunProvider>
       <IndexPage />
     </GunProvider>

@@ -18,16 +18,14 @@ export default function AccountPage(){
 
   return <>
     <div>
-      
-      <Link to="profile"> Profile </Link><span> | </span>
+      <Link to="/account"> Profile </Link><span> | </span>
       <Link to="passphrase"> Passphrase </Link><span> | </span>
       <Link to="hint"> Hint </Link>
     </div>
     <Routes>
-      <Route path="/profile" element={<ProfilePage />} />
+      <Route path="/" element={<ProfilePage />} />
       <Route path="/passphrase" element={<PassphrasePage />} />
       <Route path="/hint" element={<HintPage />} />
     </Routes>
-    
   </>
 }

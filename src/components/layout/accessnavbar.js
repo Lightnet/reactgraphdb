@@ -10,7 +10,6 @@ import { useGun } from "../gun/gunprovider.js";
 export default function AccessNavBarTop(){
 
   const {gun,gunUser} = useGun();
-  const [isUser,setIsUser] = useState(false);
 
   if(!gunUser){
     return <div>
