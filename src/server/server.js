@@ -9,6 +9,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import Gun from 'gun';
+import routes from './routes.js'
 
 export default function App(){
 
@@ -28,6 +29,14 @@ export default function App(){
   //});
 
   app.use(Gun.serve).use(express.static('public'));
+
+  //Hot reload!
+  //app.use((req, res, next) => {
+    //route(req, res, next);
+  //});
+  //app.use("*",routes);
+
+  app.use(routes);
 
   const server = app.listen(3000, () =>
     console.log('Express server is running on localhost:3000')

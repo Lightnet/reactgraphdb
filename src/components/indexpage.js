@@ -17,20 +17,22 @@ import { useGun } from './gun/gunprovider.js';
 import HomePage from './home/index.js';
 import AccessNavBarTop from './layout/accessnavbar.js';
 import MessagePage from './message/index.js';
+import GetHintPage from './account/gethint.js';
 
 export default function IndexPage(){
 
   const {gun, gunUser} = useGun(); // gun.js
 
   if(!gunUser){
-    return <div>
+    return <>
     <AccessNavBarTop />
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/signin" element={<SignIn />} />
       <Route path="/signup" element={<SignUp />} />
+      <Route path="/recovery" element={<GetHintPage />} />
     </Routes>
-  </div>
+  </>
   }
 
   return <>

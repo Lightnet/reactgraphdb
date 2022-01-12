@@ -3,19 +3,23 @@
   Created by: Lightnet
 */
 
+/*
+  top nav bar for menu access 
+*/
+
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useGun } from "../gun/gunprovider.js";
 
 export default function AccessNavBarTop(){
 
-  const {gun,gunUser} = useGun();
+  const {gun, gunUser} = useGun();
 
   if(!gunUser){
     return <div>
     <Link to="/">Home</Link> <span> | </span>
     <Link to="/signin">Sign In</Link> <span> | </span>
-    <Link to="/signup">Sign Up</Link>
+    <Link to="/signup">Sign Up</Link> <span> | </span>
   </div>
   }
 

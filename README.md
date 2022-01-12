@@ -5,13 +5,28 @@
   To develop stand alone client by using the react.js, babel, webpack, express, gun.js and other packages to develop web application access local. For test build for game stand alone, testing logic and other things.
 
 
+
+
 # Project:
   The project is in strict mode that require ./index.js and not ./index as it need ext file checks.
 
   Package.json is set to module by "type":"module" for import to work for babel.js.
 
+# React:
+  By using the react to handle html render elements and events.
+
+
 # dev:
   To build simple webpack and server to deal with the gun websocket.
+
+  Added web browser reload for files changes.
+
+## Links:
+ - https://reactrouter.com
+ - https://reactjs.org/
+   - https://reactjs.org/docs/hooks-reference.html
+   - https://reactjs.org/docs/hooks-reference.html#usecontext  Ref. GunProvider
+
 
 
 App.js entry point
@@ -124,14 +139,3 @@ export default function BlankPage(){
   </>
 }
 ```
-
-
-
-
-
-
-
-
-
-
-  

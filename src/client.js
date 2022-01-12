@@ -6,6 +6,7 @@
 // https://lostechies.com/derekgreer/2017/05/25/hello-react-a-beginners-setup-tutorial/
 
 // console.log('react');
+import Style from '../style/globals.css'
 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -30,3 +31,5 @@ gun.on('bye', (peer)=>{// peer disconnect
 
 ReactDOM.render(<MyApp />, document.getElementById('root'));
 console.log('end react');
+
+console.log("..0.");

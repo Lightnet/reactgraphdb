@@ -11,15 +11,16 @@ import React from 'react';
 
 export default function SignOut(){
   const {gun,setGunUser} = useGun(); //gun.js, user
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // react url
 
   async function clickSumbit(){
-    //console.log(gun);
-    //console.log(gun.user())
-    await gun.user().leave()
-    //console.log(gun.user())
-    setGunUser(null); //clear user data
-    navigate("/"); //url
+    if(gun){
+      //console.log(gun.user())
+      await gun.user().leave()
+      //console.log(gun.user())
+      setGunUser(null); //clear user data
+      navigate("/"); //url
+    }
   }
 
   return <div>

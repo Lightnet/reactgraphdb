@@ -176,8 +176,9 @@ export default function SignIn(){
 
           <tr>
             <td>
-              <button onClick={clickSumbit}>Submit</button>
-              <Link to='/signup'>Sign Up</Link>
+              <button onClick={clickSumbit}>Submit</button><span> | </span>
+              <Link to='/signup'>Sign Up</Link><span> | </span>
+              <Link to='/recovery'>Recovery</Link>
             </td>
           </tr>
 

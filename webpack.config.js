@@ -25,7 +25,6 @@ const __dirname = dirname(__filename);
 
 //module.exports = {
 
-
 export default env => {
    
    return {
@@ -51,7 +50,11 @@ export default env => {
             use: {
                loader: 'babel-loader'
             }
-         }
+         },
+         {
+            test: /\.css$/i,
+            use: ["style-loader", "css-loader"],
+          },
          ]
       },
       node: {
