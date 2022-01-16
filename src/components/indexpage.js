@@ -18,33 +18,42 @@ import HomePage from './home/index.js';
 import AccessNavBarTop from './layout/accessnavbar.js';
 import MessagePage from './message/index.js';
 import GetHintPage from './account/gethint.js';
+import NotifyManager from './notify/notifymanager.js';
 
 export default function IndexPage(){
 
   const {gun, gunUser} = useGun(); // gun.js
 
-  if(!gunUser){
-    return <>
-    <AccessNavBarTop />
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/signin" element={<SignIn />} />
-      <Route path="/signup" element={<SignUp />} />
-      <Route path="/recovery" element={<GetHintPage />} />
-    </Routes>
-  </>
-  }
+    function renderPage(){
+      if(!gunUser){
+        return <>
+        <AccessNavBarTop />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/recovery" element={<GetHintPage />} />
+        </Routes>
+      </>
+      }else{
+        return <>
+        <AccessNavBarTop />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/account/*" element={<AccountPage />} />
+          <Route path="/message/*" element={<MessagePage />} />
+          <Route path="/chat/*" element={<ChatPage />} />
+          <Route path="/signout" element={<SignOut />} />
+        </Routes>
+      </>
+      }
+    }
 
   return <>
-    <AccessNavBarTop />
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/account/*" element={<AccountPage />} />
-      <Route path="/message/*" element={<MessagePage />} />
-      <Route path="/chat/*" element={<ChatPage />} />
-      <Route path="/signout" element={<SignOut />} />
-    </Routes>
+    {renderPage()}
+    <NotifyManager />
   </>
+  
 }
 /*
 <label>Hello World! React!</label>

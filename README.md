@@ -2,15 +2,24 @@
 
 
 # Information:
-  To develop stand alone client by using the react.js, babel, webpack, express, gun.js and other packages to develop web application access local. For test build for game stand alone, testing logic and other things.
+  To build stand alone client by using the react.js, babel, webpack, express, gun.js and other packages to develop web application. For test build for game stand alone, testing logic and other things.
 
+  By using gun.js graph database format. To query data information. By using the node graph to link to each other nodes.
 
+  It does suppoert peer to peer graph when snyc when link to url address by web socket format.
+
+# guide:
+```
+npm run devp
+```
 
 
 # Project:
   The project is in strict mode that require ./index.js and not ./index as it need ext file checks.
 
   Package.json is set to module by "type":"module" for import to work for babel.js.
+
+  Note that require() does not work when used type module.
 
 # React:
   By using the react to handle html render elements and events.
