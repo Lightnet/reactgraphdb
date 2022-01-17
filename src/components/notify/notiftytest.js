@@ -5,7 +5,7 @@
 
 import React from 'react';
 import { useNotifty } from "./notifyprovider.js"
-import { nInfo } from './notifytype.js';
+import { nError, nInfo, nSuccess, nWarning } from './notifytype.js';
 
 export default function NotiftyTest(){
 
@@ -15,8 +15,22 @@ export default function NotiftyTest(){
     setNotify(nInfo( <label> Test </label>,true ))
   }
 
+  function clickSuccess(){
+    setNotify(nSuccess( <label> Test </label>,true ))
+  }
+
+  function clickWarning(){
+    setNotify(nWarning( <label> Test </label>,true ))
+  }
+
+  function clickError(){
+    setNotify(nError( <label> Test </label>,true ))
+  }
 
   return <>
     <button onClick={clickInfo}> Test Info </button>
+    <button onClick={clickSuccess}> Test Success </button>
+    <button onClick={clickWarning}> Test Warning </button>
+    <button onClick={clickError}> Test Error </button>
   </>
 }

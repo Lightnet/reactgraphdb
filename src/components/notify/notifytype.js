@@ -7,10 +7,11 @@
 
 */
 
-import { useNotifty } from "./notifyprovider.js";
+//import { useNotifty } from "./notifyprovider.js";
 import { Color } from "./notifyprovider.js";
 
 //does not work
+/*
 export function info(children, autoClose) {
   const { setNotify } = useNotifty(); //cause error
   setNotify({
@@ -19,15 +20,6 @@ export function info(children, autoClose) {
     autoClose,
   });
   return;
-}
-
-function nInfo(children, autoClose){
-
-  return {
-    color: Color.info,
-    children,
-    autoClose,
-  }
 }
 
 export function Notifysuccess(children, autoClose) {
@@ -41,15 +33,6 @@ export function Notifysuccess(children, autoClose) {
   });
 }
 
-function nSuccess(children, autoClose){
-
-  return {
-    color: Color.success,
-    children,
-    autoClose,
-  }
-}
-
 export function Notifywarning(children, autoClose) {
 
   const { setNotify } = useNotifty();
@@ -59,15 +42,6 @@ export function Notifywarning(children, autoClose) {
     children,
     autoClose,
   });
-}
-
-function nWarning(children, autoClose){
-
-  return {
-    color: Color.warning,
-    children,
-    autoClose,
-  }
 }
 
 export function Notifyerror(children, autoClose) {
@@ -80,8 +54,35 @@ export function Notifyerror(children, autoClose) {
     autoClose,
   });
 }
+*/
+export function nInfo(children, autoClose){
 
-function nError(children, autoClose){
+  return {
+    color: Color.info,
+    children,
+    autoClose,
+  }
+}
+
+export function nSuccess(children, autoClose){
+
+  return {
+    color: Color.success,
+    children,
+    autoClose,
+  }
+}
+
+export function nWarning(children, autoClose){
+
+  return {
+    color: Color.warning,
+    children,
+    autoClose,
+  }
+}
+
+export function nError(children, autoClose){
 
   return {
     color: Color.error,
@@ -90,10 +91,11 @@ function nError(children, autoClose){
   }
 }
 
-
+/*
 export {
   nInfo
   , nSuccess
   , nWarning
   , nError
 }
+*/

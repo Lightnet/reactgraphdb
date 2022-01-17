@@ -2,14 +2,17 @@
   LICENSE: MIT
   Created by: Lightnet
 */
-
+import React, { useState, useEffect } from "react";
 import styles from "./modal.module.css";
-import { useRef, useState, useEffect } from 'react';
 
-export default function Component({isOpen,closeModal,children}) {
+export default function EModal({isOpen,closeModal,children}) {
   const [ sDisplay, setsDisplay ]=useState('none');
 
-  useEffect(async () => { 
+  useEffect(() => {
+    console.log('isOpen:',isOpen);
+    if(isOpen == undefined){
+      return;
+    }
     if(isOpen==true){
       setsDisplay("block");  
     }
