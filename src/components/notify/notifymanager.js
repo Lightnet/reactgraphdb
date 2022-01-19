@@ -4,6 +4,7 @@
 */
 
 import React,{ useEffect } from "react";
+import { nanoid16 } from "../../lib/helper.js";
 import Notification from "./notification.js";
 import NotifyContainer from "./notifycontainer.js";
 import { useNotifty } from "./notifyprovider.js";
@@ -18,8 +19,8 @@ export default function NotifyManager(){
 
   useEffect(()=>{
     if(notify){//check if variable chanage
-      console.log('notifty...a');
-      console.log(notify);
+      //console.log('notifty...a');
+      //console.log(notify);
       let { color, autoClose, children } = notify;
       createNotification({ color, autoClose, children });
     }
@@ -33,7 +34,8 @@ export default function NotifyManager(){
           children,
           color,
           autoClose,
-          id: prevNotifications.length,
+          //id: prevNotifications.length,
+          id:nanoid16()
         },
       ];
     });
@@ -51,7 +53,7 @@ export default function NotifyManager(){
     {notifications.map(({ id, ...props }, index) => {
       //console.log(id);
       //console.log(index);
-      console.log(props);
+      //console.log(props);
       //return (<label key={id}>Hello</label>);
       return (
       <Notification

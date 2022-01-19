@@ -12,7 +12,8 @@ export default function NotiftyTest(){
   const {setNotify} = useNotifty();
 
   function clickInfo(){
-    setNotify(nInfo( <label> Test </label>,true ))
+    //setNotify(nInfo( <label> Test </label>,true ))
+    setNotify(nInfo( 'Test' ,true ))
   }
 
   function clickSuccess(){

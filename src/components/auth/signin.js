@@ -9,6 +9,9 @@ import { Link, useNavigate  } from "react-router-dom";
 
 import React, { useEffect, useState } from "react";
 import { useGun } from "../gun/gunprovider.js";
+import { nError, nSuccess } from "../notify/notifytype.js";
+import { useNotifty } from "../notify/notifyprovider.js";
+
 
 export default function SignIn(){
   const {
@@ -17,6 +20,7 @@ export default function SignIn(){
   } = useGun();
 
   const navigate = useNavigate();
+  const {setNotify} = useNotifty();
 
   const [bPair, setBPair] = useState(false);
   const [pair, setPair] = useState('');
@@ -44,9 +48,12 @@ export default function SignIn(){
       console.log(ack.ok);
       setStatus('');
       if(ack.err){
-        setStatus(ack.err);
+        //setStatus(ack.err);
+        setNotify(nError(ack.err,true ))
         return;
       }
+
+      setNotify(nSuccess( "Signin Pass!",true ))
 
       //setStatus('');
       let user0 = gun.user();
@@ -92,10 +99,12 @@ export default function SignIn(){
       //console.log(ack);
       setStatus('');
       if(ack.err){
-        setStatus(ack.err);
+        //setStatus(ack.err);
+        setNotify(nError(ack.err,true ))
         return;
       }
       //setStatus('');
+      setNotify(nSuccess( "Signin Pass!",true ))
       let user0 = gun.user();
       console.log(user0)
       setUser(user0.is);
@@ -123,35 +132,25 @@ export default function SignIn(){
             <button onClick={clickCreatePair}>Create Pair</button> <label>Status:{status}</label>
             </td>
           </tr>
-
           <tr>
             <td>
               <label>Pair:</label>
             </td>
           </tr>
-
           <tr>
             <td>
               <textarea id="pair" value={pair} onChange={typingPair}></textarea>
             </td>
           </tr>
-
           <tr>
             <td>
               <button onClick={clickPair}>Submit</button>
               <Link to='/signup'>Sign Up</Link>
             </td>
           </tr>
-
         </tbody>
       ):(
         <tbody>
-        
-          <tr>
-            <td>
-              <label>Status:{status}</label>
-            </td>
-          </tr>
           <tr>
             <td>
               <label>Alias:</label>
@@ -173,7 +172,6 @@ export default function SignIn(){
               <input value={userPassword} onChange={typingPassword}></input>
             </td>
           </tr>
-
           <tr>
             <td>
               <button onClick={clickSumbit}>Submit</button><span> | </span>
@@ -181,10 +179,12 @@ export default function SignIn(){
               <Link to='/recovery'>Recovery</Link>
             </td>
           </tr>
-
         </tbody>
         )}
       </table>
     </div>
   </div>
 }
+/*
+<label>Status:{status}</label>
+*/

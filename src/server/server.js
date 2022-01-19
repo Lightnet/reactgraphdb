@@ -5,15 +5,21 @@
 
 // https://www.section.io/engineering-education/how-to-setup-nodejs-express-for-react/
 // https://www.twilio.com/blog/react-app-with-node-js-server-proxy
-
+// https://www.youtube.com/watch?v=PNtFSVU-YTI
 import express from 'express';
 import bodyParser from 'body-parser';
 import Gun from 'gun';
 import routes from './routes.js'
+import cors from 'cors';
 
 export default function App(){
 
   const app = express();
+  app.use(cors({
+    origin:'http://localhost:3000',
+    //methods:['GET','POST']
+  }));
+
 
   app.use(bodyParser.urlencoded({ extended: false }));
 

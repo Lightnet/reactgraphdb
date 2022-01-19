@@ -9,6 +9,7 @@
 
 //import { useNotifty } from "./notifyprovider.js";
 import { Color } from "./notifyprovider.js";
+import React from "react";
 
 //does not work
 /*
@@ -56,6 +57,10 @@ export function Notifyerror(children, autoClose) {
 }
 */
 export function nInfo(children, autoClose){
+  //console.log(typeof children)
+  if(typeof children === 'string'){
+    children = <label> {children} </label>
+  }
 
   return {
     color: Color.info,
@@ -66,6 +71,10 @@ export function nInfo(children, autoClose){
 
 export function nSuccess(children, autoClose){
 
+  if(typeof children === 'string'){
+    children = <label> {children} </label>
+  }
+
   return {
     color: Color.success,
     children,
@@ -74,7 +83,9 @@ export function nSuccess(children, autoClose){
 }
 
 export function nWarning(children, autoClose){
-
+  if(typeof children === 'string'){
+    children = <label> {children} </label>
+  }
   return {
     color: Color.warning,
     children,
@@ -83,7 +94,9 @@ export function nWarning(children, autoClose){
 }
 
 export function nError(children, autoClose){
-
+  if(typeof children === 'string'){
+    children = <label> {children} </label>
+  }
   return {
     color: Color.error,
     children,
