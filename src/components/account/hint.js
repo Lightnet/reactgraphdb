@@ -10,8 +10,12 @@
 import React, { useEffect, useState } from "react";
 import { useGun } from "../gun/gunprovider.js";
 
+import { useNotifty } from "../notify/notifyprovider.js";
+import { nError, nSuccess, nWarning } from "../notify/notifytype.js";
+
 export default function HintPage(){
 
+  const {setNotify} = useNotifty();
   const {gun}=useGun();
 
   const [question1, setQuestion1] = useState('');
@@ -55,7 +59,7 @@ export default function HintPage(){
   async function clickApply(){
     let user = gun.user();
     let sec = await gun.SEA.secret(user.is.epub, user._.sea);//mix key to decrypt
-    console.log(Gun.SEA);
+    //console.log(Gun.SEA);
 
     //console.log(sec);
     let enc_q1 = await gun.SEA.encrypt(question1, sec); // encrypt q1
@@ -69,12 +73,14 @@ export default function HintPage(){
     user.get('forgot').get('hint').put(enc,ack=>{//set hash hint
       //console.log(ack);
       if(ack.err){
-          console.log("Error!");
+          //console.log("Error!");
+          setNotify(nError("Hint Error",true));
           //modalmessage(ack.err);
           return;
       }
       if(ack.ok){
-          console.log('Hint Apply!');
+          //console.log('Hint Apply!');
+          setNotify(nSuccess("Hint Apply",true));
           //modalmessage('Hint Apply!');
       }
     });

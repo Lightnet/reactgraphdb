@@ -6,9 +6,13 @@
 import React, { useState } from "react";
 import { useGun } from "../gun/gunprovider.js";
 
+import { useNotifty } from "../notify/notifyprovider.js";
+import { nInfo, nSuccess, nWarning } from "../notify/notifytype.js";
+
 export default function PassphrasePage(){
 
   const {gun}=useGun();
+  const {setNotify} = useNotifty();
 
   const [passphrase, setPassphrase] = useState('12345678');
   const [newPassphrase, setNewPassphrase] = useState('12345678');
@@ -25,9 +29,10 @@ export default function PassphrasePage(){
     let user = gun.user();
 
     user.auth(user.is.alias, passphrase, (ack) => {//user auth call
-      console.log(ack);
+      //console.log(ack);
       let status = ack.err || "Saved!";//check if there error else saved message.
-      console.log(status);
+      setNotify(nInfo(status,true ))
+      //console.log(status);
       //modalmessage(status);
 
     }, {change: newPassphrase});//set config to change password

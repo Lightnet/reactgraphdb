@@ -3,7 +3,7 @@
   Created by: Lightnet
 */
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   Routes,
   Route
@@ -22,7 +22,7 @@ import NotifyManager from './notify/notifymanager.js';
 
 export default function IndexPage(){
 
-  const {gun, gunUser} = useGun(); // gun.js
+  const {gunUser} = useGun(); // gun.js
 
     function renderPage(){
       if(!gunUser){

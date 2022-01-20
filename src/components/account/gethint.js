@@ -5,40 +5,18 @@
 
 import React, { useEffect, useState } from "react";
 import { useGun } from "../gun/gunprovider.js";
+import { useNotifty } from "../notify/notifyprovider.js";
+import { nSuccess, nWarning } from "../notify/notifytype.js";
 
 export default function GetHintPage(){
 
+  const {setNotify} = useNotifty();
   const {gun}=useGun();
 
   const [alias, setAlias] = useState('');
   const [question1, setQuestion1] = useState('');
   const [question2, setQuestion2] = useState('');
   const [hint, setHint] = useState('');
-
-  /*
-  useEffect(async()=>{
-    if(gun){
-      console.log("MOUNT....")
-      let user = gun.user();
-      let sec = await gun.SEA.secret(user.is.epub, user._.sea);//mix key to decrypt
-
-      let q1 = await user.get('forgot').get('q1').then();
-      q1 = await gun.SEA.decrypt(q1, sec);//decrypt question1
-
-      let q2 = await user.get('forgot').get('q2').then();
-      q2 = await gun.SEA.decrypt(q2, sec);//decrypt question1
-
-      setQuestion1(q1);
-      setQuestion2(q2);
-
-      sec = await gun.SEA.work(q1,q2); //encrypt key
-
-      let ghint = await user.get('hint').then(); //get encrypt hint 
-      ghint = await gun.SEA.decrypt(ghint, sec); //decrypt hint
-      setHint(ghint);
-    }
-  },[])
-  */
 
   function typeAlias(event){
     setAlias(event.target.value);
@@ -57,6 +35,8 @@ export default function GetHintPage(){
     if(gun){
       let user = await gun.get('~@'+alias).then();
       if(!user){
+        //console.log("publickey");
+        setNotify(nWarning("Does not Exist!",true ))
         return;
       }
       let publickey;
@@ -64,16 +44,28 @@ export default function GetHintPage(){
         //console.log(obj);
         publickey = obj;//property name for public key
       }
+      if(!publickey){
+        //console.log(publickey)
+        return;
+      }
 
-      console.log(publickey)
+      //console.log(publickey)
       publickey = gun.SEA.opt.pub(publickey);//check and convert to key or null?
-      console.log(publickey)
+      //console.log(publickey)
       let to = gun.user(publickey);//get user alias graph
-
-      let hint = await to.get('forgot').get('hint').then();
-      console.log(hint);
-      console.log(gun.SEA);
-
+      let dec = await Gun.SEA.work(question1,question2);//get fquestion1 and fquestion2 string to mix key
+      let ehint = await to.get('forgot').get('hint').then();
+      //console.log(hint);
+      ehint = await Gun.SEA.decrypt(ehint,dec);//get hint and key decrypt message
+      if(ehint !=null){//check if hint is string or null
+        //$('#fhint').val(hint);
+        setHint(ehint);
+        setNotify(nSuccess("Pass Decrypt!",true ))
+      }else{
+        //modalmessage("Fail Decrypt!");
+        setNotify(nWarning("Fail Decrypt!",true ))
+      }
+      //console.log(gun.SEA);
     }
   }
 

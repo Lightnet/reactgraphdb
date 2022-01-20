@@ -9,7 +9,7 @@ export default function EModal({isOpen,closeModal,children}) {
   const [ sDisplay, setsDisplay ]=useState('none');
 
   useEffect(() => {
-    console.log('isOpen:',isOpen);
+    //console.log('isOpen:',isOpen);
     if(isOpen == undefined){
       return;
     }

@@ -10,7 +10,10 @@ const browserSync = create();
 // Start the server
 browserSync.init({
     port: 8080
+  , ui: false
   , open: false // auto open tab window
+  , injectChanges: true
+  , codeSync: true
   //, overrideURL:  'http://localhost:8080'
   //, proxy: {
     //target: "localhost:8080",
@@ -25,7 +28,7 @@ browserSync.init({
       //handle redirect to default page
       bs.addMiddleware("*", function (req, res) {
         // code 302
-        res.writeHead(200, {
+        res.writeHead(302, {
             //location: "404.html"
             location: "/"
         });
