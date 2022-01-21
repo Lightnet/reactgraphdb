@@ -58,18 +58,33 @@ export default function InboxMessages(){
         let pkey = await guser.get('pub');
         setMessages([]);//clear message
 
+        let to = gun.user(pub);//get alias
+        let who = await to.then() || {};//get alias data
+        if(!who.alias){
+          console.log("No Alias!");
+          //$('#mwho').text("who?");
+          return;
+        }
+
+        let UIdec = await gun.SEA.secret(who.epub, guser._.sea); // Diffie-Hellman
+
+
         await gun.get('~'+pkey)
           .get('message')
-          .get(pub).once().map().once((data,key)=>{
-            console.log("key")
-            console.log(key)
-            console.log("data")
-            console.log(data)
+          .get(pub).once().map().once( async (data,key)=>{
+            //console.log("key")
+            //console.log(key)
+            //console.log("data")
+            //console.log(data)
+            let subject = await gun.SEA.decrypt(data.subject, UIdec);
+            let content = await gun.SEA.decrypt(data.content, UIdec);
+
+
             setMessages(item=>[...item,{
-              date:data.date,
+              date:key,
               pub:data.pub,
-              subject:data.subject,
-              content:data.content,
+              subject:subject,
+              content:content,
             }])
           })
       }

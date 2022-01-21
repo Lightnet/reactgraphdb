@@ -4,7 +4,7 @@
 */
 
 import React, { useEffect, useRef, useState } from "react";
-import { unixTime } from "../../lib/helper.js";
+import { isEmpty, unixTime } from "../../lib/helper.js";
 import { useGun } from "../gun/gunprovider.js";
 
 export default function ChatPage(){
@@ -14,8 +14,36 @@ export default function ChatPage(){
   const [messages, setMessage] = useState([]);
   const [chat, setChat] = useState(null);
   const [secret, setSecret] = useState('');
+  const [secret0, setSecret0] = useState('');
+
+  let sec = '';
 
   const divRref = useRef(null);
+
+  useEffect(async()=>{
+    let enc = await SEA.work("public","chat"); //encrypttion key default?
+    setSecret(enc);
+  },[])
+
+  useEffect(()=>{
+    //console.log("secret");
+    console.log("secret::",secret);
+    if(!isEmpty(secret)){
+      console.log("secret:.................:",secret);
+      sec = secret;
+      //setSecret0(secret);
+      let chatv = gun.get('chat');
+      chatv.map().once(qcallback);
+      setChat(chatv)
+    }
+    //console.log("secret");
+    return ()=>{
+      if(chat){
+        chat.off();
+      }
+    }
+    
+  },[secret])
 
   async function qcallback(data,key){
     //console.log('incoming messages...')
@@ -24,8 +52,11 @@ export default function ChatPage(){
     if(data.message != null){
       //console.log("add ",data);
       //let dec = data.message;
+      //console.log("secret:>>>>>>>>>>",secret);
 
-      let enc = await SEA.work("public","chat");
+      //let enc = await SEA.work("public","chat");
+      let enc = secret;
+      //console.log(sec);
 
       //console.log("secret");
       //console.log(enc);
@@ -49,22 +80,15 @@ export default function ChatPage(){
   });
 
   //once set up
-  useEffect(async()=>{
-
-    let enc = await SEA.work("public","chat"); //encrypttion key default?
-    //console.log("enc")
-    //console.log(enc)
-    //console.log(typeof enc)
-    setSecret(enc);
-
-    let chatv = gun.get('chat');
-    chatv.map().once(qcallback);
-    setChat(chatv)
-    return ()=>{
-      if(chat){
-        chat.off();
-      }
-    }
+  useEffect(()=>{
+    //let chatv = gun.get('chat');
+    //chatv.map().once(qcallback);
+    //setChat(chatv)
+    //return ()=>{
+      //if(chat){
+        //chat.off();
+      //}
+    //}
   },[])
 
   async function typingInputMessage(event){
@@ -80,7 +104,7 @@ export default function ChatPage(){
 
       let sec = await gun.SEA.work("public","chat");//encrypttion key default?
       let enc = await SEA.encrypt(msg,sec);
-      console.log(enc)
+      //console.log(enc)
 
       gun.get('chat').get(timestamp).put({
         alias:who,
@@ -97,7 +121,7 @@ export default function ChatPage(){
 
       let sec = await gun.SEA.work("public","chat");//encrypttion key default?
       let enc = await SEA.encrypt(msg,sec);
-      console.log(enc)
+      //console.log(enc)
 
       gun.get('chat').get(timestamp).put({
         alias:who,
@@ -113,7 +137,7 @@ export default function ChatPage(){
     <div style={{height:'200px',width:'200px',borderStyle:'solid',overflow:'scroll'}}>
       {messages.map(item=>{
         return <div key={item.id}> 
-          <label> Alias:{item.alias} </label>
+          <label> @{item.alias}: </label>
           <label> {item.message} </label>
         </div>
       })}
