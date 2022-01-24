@@ -6,14 +6,14 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { useGun } from "../gun/gunprovider.js";
 
-import { useNotifty } from "../notify/notifyprovider.js";
-import { nSuccess, nWarning } from "../notify/notifytype.js";
+//import { useNotifty } from "../notify/notifyprovider.js";
+//import { nSuccess, nWarning } from "../notify/notifytype.js";
 import {isEmpty} from '../../lib/helper.js';
 
 export default function SearchPublicKey(){
 
   const {gun}=useGun();
-  const {setNotify} = useNotifty();
+  //const {setNotify} = useNotifty();
 
   const [pub, setPub] = useState('');
   const [status, setStatus] = useState('');
@@ -46,6 +46,7 @@ export default function SearchPublicKey(){
 
     if(isEmpty(pub)){
       console.log('empty')
+      setStatus('');
       return;
     }
     if(gun){
@@ -56,6 +57,7 @@ export default function SearchPublicKey(){
       let val = await user.get('alias').then();
       if(val){
         setAlias(val);
+        setStatus('found');
       }
 
       val = await user.get('profile').get('information').then();
@@ -80,19 +82,16 @@ export default function SearchPublicKey(){
     }
   }
 
-
-
   return <>
-  <label>Search:</label> <br />
-  <label>[Public Key:]</label> <input value={pub} onChange={searchPubKey} onKeyUp={pressPubKey}/>  <br />
-  <label>[status]:</label> <label>{status} </label>  <br />
+    <label>Search:</label> <br />
+    <label>[Public Key:]</label> <input value={pub} onChange={searchPubKey} onKeyUp={pressPubKey}/>  <br />
+    <label>[status]:</label> <label>{status} </label>  <br />
 
-  <label>Alias:</label> <input value={alias} readOnly /> <br />
-  <label>Information:</label> <input value={information} readOnly/> <br />
-  <label>Skills:</label> <input value={skills} readOnly /> <br />
+    <label>Alias:</label> <input value={alias} readOnly /> <br />
+    <label>Information:</label> <input value={information} readOnly/> <br />
+    <label>Skills:</label> <input value={skills} readOnly /> <br />
 
-  <label>Born:</label> <input value={born} readOnly/> <br />
-  <label>Location:</label> <input value={location} readOnly /> <br />
-  
-</>
+    <label>Born:</label> <input value={born} readOnly/> <br />
+    <label>Location:</label> <input value={location} readOnly /> <br />  
+  </>
 }

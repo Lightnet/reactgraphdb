@@ -28,6 +28,7 @@ export default function AccessNavBarTop(){
     <Link to="account">Account</Link> <span> | </span>
     <Link to="message">Message</Link> <span> | </span>
     <Link to="chat">Chat</Link> <span> | </span>
+    <Link to="groupchat">Group Chat</Link> <span> | </span>
     <Link to="settings">Settings</Link> <span> | </span>
     <Link to="signout">Sign Out</Link>
   </div>

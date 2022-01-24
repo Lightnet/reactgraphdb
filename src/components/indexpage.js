@@ -19,17 +19,20 @@ import AccessNavBarTop from './layout/accessnavbar.js';
 import MessagePage from './message/index.js';
 import GetHintPage from './account/gethint.js';
 import NotifyManager from './notify/notifymanager.js';
+import GroupChat from './groupchat/index.js';
 
 export default function IndexPage(){
 
   const {gunUser} = useGun(); // gun.js
+
+  //<Route path="/" element={<HomePage />} />
 
     function renderPage(){
       if(!gunUser){
         return <>
         <AccessNavBarTop />
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<SignIn />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/recovery" element={<GetHintPage />} />
@@ -42,6 +45,7 @@ export default function IndexPage(){
           <Route path="/" element={<HomePage />} />
           <Route path="/account/*" element={<AccountPage />} />
           <Route path="/message/*" element={<MessagePage />} />
+          <Route path="/groupchat/*" element={<GroupChat />} />
           <Route path="/chat/*" element={<ChatPage />} />
           <Route path="/signout" element={<SignOut />} />
         </Routes>

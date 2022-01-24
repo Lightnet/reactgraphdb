@@ -7,6 +7,15 @@ import React,{ createContext, useContext, useEffect, useMemo, useState } from "r
 import Gun from 'gun/gun.js';
 import SEA from 'gun/sea.js';
 
+import 'gun/lib/radix.js';
+import 'gun/lib/radisk.js';
+import 'gun/lib/store.js';
+import 'gun/lib/rindexed.js';
+
+//import 'gun/lib/path.js';
+//import 'gun/lib/list.js';
+import 'gun/lib/promise.js';
+
 export const gunContext = createContext();
 
 export function useGun(){
@@ -29,6 +38,7 @@ export function GunProvider(props){
       //let gunp = Gun();
       let gunp = Gun({
         peers:['http://localhost:3000/gun']
+        , localStorage: false
       });
       //gun = Gun();
       gunp.on('hi', peer => {//peer connect
