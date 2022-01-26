@@ -6,9 +6,12 @@
 import { Link } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { useGun } from "../gun/gunprovider.js";
+import { nError, nSuccess } from "../notify/notifytype.js";
+import { useNotifty } from "../notify/notifyprovider.js";
 
 export default function SignUp(){
   const {gun} = useGun();
+  const {setNotify} = useNotifty();
 
   const [status, setStatus] = useState('');
 
@@ -34,16 +37,19 @@ export default function SignUp(){
       // Causes ReferenceError: CryptoKey is not defined.
       console.log(ack)
       if(ack.err){
-        setStatus(ack.err);
+        //setStatus(ack.err);
         //if(ack.err=="User already created!"){
           //console.log('EXIST');
           //setStatus(ack.err);
         //}
+        setNotify(nError(ack.err,true ))
+        return;
       }
       if(ack.ok){
-        console.log('PASS')
-        setStatus("CREATE");
+        //console.log('PASS')
+        //setStatus("CREATE");
       }
+      setNotify(nSuccess( "Signin Pass!",true ))
     })
 
     /*
@@ -57,7 +63,7 @@ export default function SignUp(){
     console.log(data);
     */
   }
-
+  //<label>Status:{status}</label>
   return <div>
     <div>
      <label>Register</label>
@@ -65,9 +71,9 @@ export default function SignUp(){
     <div>
       <table>
         <tbody>
-        <tr>
+          <tr>
             <td>
-              <label>Status:{status}</label>
+
             </td>
           </tr>
           <tr>

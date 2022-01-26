@@ -3,17 +3,19 @@
   Created by: Lightnet
 */
 
-
 import React, { useEffect, useRef, useState } from "react";
 import { useGun } from "../gun/gunprovider.js";
-import Gun from 'gun/gun.js'
+//import Gun from 'gun/gun.js';
 import { nanoid32, unixTime } from "../../lib/helper.js";
-import { isEmpty } from '../../lib/helper.js'
+import { isEmpty } from '../../lib/helper.js';
+import { nError, nSuccess } from "../notify/notifytype.js";
+import { useNotifty } from "../notify/notifyprovider.js";
 
 export default function GroupChat(){
 
   //const [chatID, setChatID] = useState('');
   const {gun} = useGun();
+  const {setNotify} = useNotifty();
 
   const [isAdmin, setIsAdmin] = useState(false);
   const [isRoom, setisRoom] = useState(false);
@@ -117,32 +119,55 @@ export default function GroupChat(){
     }
   }
 
-  async function msgCallback(data, key){
-    console.log('incoming messages...');
-    if(data == null)return;
-    if(data.message != null){
-      //let message = window.atob(data.message);
-
-    }
-  }
-
-  async function addGroup(){
-    //console.log(Gun);
-    //let guntext = Gun.text.random();
-    //console.log(guntext);
-  }
-
-  function removeGroup(){
-
-  }
-
   function enterGroup(){
     setisRoom(true);
-
     initGroupChat();
   }
+
+  async function addGroupChat(){
+    let user = gun.user();
+    if(!user.is)return;
+    let privatekey = (groupID || "").trim() ;
+    if(!privatekey)return;
+    let gkey = await gun.get(privatekey).then();
+    //console.log(gkey);
+    if(gkey == undefined){
+      console.log("NOT FOUND!");
+      setNotify(nError("GroupChat ID Not Found!",true ));
+      return;
+    }
+    let guninfo = gun.get(privatekey).get('info');
+    let pub = await guninfo.get('pub').then();
+    let title = await guninfo.get('name').then();
+    let description = await guninfo.get('description').then();
+    let date = await guninfo.get('date').then();
+    //console.log(pub);console.log(title);console.log(date);
+    user.get('groupchat').get(privatekey).get('info').put({
+        pub:pub,
+        name: title,
+        description:description,
+        date:date
+    });
+    setNotify(nSuccess( "Group Chat Added!!",true ));
+  }
+
+  async function removeGroupChat(){
+    //need to check for owner groupchat delete
+    let user = gun.user();
+    if(!user.is)return;
+    let privatekey = (groupID || "").trim();
+    if(!privatekey)return;
+    let gkey = await gun.get(privatekey).then();
+    if(gkey == undefined){
+      console.log("NOT FOUND!");
+      return;
+    }
+    user.get('groupchat').get(privatekey).put(null);
+    setNotify(nSuccess( "Group Chat Delete!!",true ));
+  }
+
   // https://github.com/Lightnet/gunjstrustsharekey/blob/master/client.js Line:1042
-  async function createGroup(){
+  async function createGroupChat(){
     // let genprivatechatid = Gun.text.random();//random string
     // let gensharekey = Gun.text.random();//random string
 
@@ -190,8 +215,18 @@ export default function GroupChat(){
 
   }
 
-  function deleteGroup(){
-
+  async function deleteGroupChat(){
+    //need to check for owner groupchat delete
+    let user = gun.user();
+    if(!user.is)return;
+    let privatekey = (groupID || "").trim();
+    if(!privatekey)return;
+    let gkey = await gun.get(privatekey).then();
+    if(gkey == undefined){
+        console.log("NOT FOUND!");
+        return;
+    }
+    user.get('groupchat').get(privatekey).put(null);
   }
 
   // https://github.com/Lightnet/gunjstrustsharekey/blob/master/client.js line:975
@@ -232,6 +267,8 @@ export default function GroupChat(){
     //console.log(dec);
     if(dec==null){
       console.log("NULL SHARE KEY!");
+      setNotify(nError("NULL SHARE KEY!",true ));
+      setisRoom(false);
       return;
     }
     let privatesharekey = dec;
@@ -279,32 +316,30 @@ export default function GroupChat(){
   }
 
   // allow alias public key access to group chat
-  async function groupGrant(){
+  async function groupGrantPublicKey(){
     //let ppublickey = ($('#ppublickey').val() || "").trim();
     let groupKey = (groupID || "").trim();
     if(isEmpty(groupKey)){
-      console.log("EMPTY groupKey");
+      //console.log("EMPTY groupKey");
+      setNotify(nError("GroupChat ID Empty!",true ));
       return;
     }
     let pkey = shareKey;
 
     let pubKey = (publicKey || "").trim();
     if(isEmpty(pubKey)){
-      console.log("EMPTY pubKey");
+      //console.log("EMPTY pubKey");
+      setNotify(nError("Public Key Empty!",true ));
       return;
     }
-
     let pownid = await gun.get(groupID).get('info').get('pub').then();
-
     if(pownid == pubKey){
       console.log("owner!");
       return;
     }
-
     let user = gun.user();
     let pair = user._.sea;
     let to = gun.user(pubKey);
-
     let who = await to.get('alias').then();
 
     if(!who)return;
@@ -323,9 +358,49 @@ export default function GroupChat(){
 
     console.log(pkey);
     console.log("finish grant!");
+  }
 
+  async function groupRevokePublicKey(){
+    //let ppublickey = ($('#ppublickey').val() || "").trim();
+    let groupKey = (groupID || "").trim();
+    if(isEmpty(groupKey)){
+      //console.log("EMPTY groupKey");
+      setNotify(nError("GroupChat ID Empty!",true ));
+      return;
+    }
+    let pkey = (shareKey || "").trim();
 
+    let pubKey = (publicKey || "").trim();
+    if(isEmpty(pubKey)){
+      console.log("EMPTY pubKey");
+      setNotify(nError("Public Key Empty!",true ));
+      return;
+    }
 
+    let pownid = await gun.get(groupKey).get('info').get('pub').then();
+    if(pownid == pubKey){
+        console.log("owner");
+        return;
+    }
+    let user = gun.user();
+    let pair = user._.sea;
+    let to = gun.user(pubKey);
+    let who = await to.get('alias').then();
+    if(!who)return;
+    if(!pkey)return;
+    //need to generate new share key
+    //user.get('privatechatroom')
+        //.get(privatechatkey)
+        //.get('pub').map().once(function(data,key){});
+
+    let pub = await to.get('pub').then();
+    user.get('groupchat')
+        .get(groupKey)
+        .get('pub')
+        .get(pub).put(null);
+    console.log(pkey);
+    console.log("finish revoke!");
+    setNotify(nSuccess( "Revoke Public Key!"+pkey,true ))
 
   }
 
@@ -340,10 +415,10 @@ export default function GroupChat(){
         })}
       </select>
       <button onClick={enterGroup}>Enter</button>
-      <button onClick={addGroup}>Add</button>
-      <button onClick={removeGroup} >Remove</button>
-      <button onClick={createGroup}>Create Group</button>
-      <button onClick={deleteGroup}>Delete Group</button>
+      <button onClick={addGroupChat}>Add</button>
+      <button onClick={removeGroupChat} >Remove</button>
+      <button onClick={createGroupChat}>Create Group</button>
+      <button onClick={deleteGroupChat}>Delete Group</button>
       </>
     }else{
       return <>
@@ -383,15 +458,13 @@ export default function GroupChat(){
     console.log('init chat...');
   }
 
+  // <button onClick={checkList}>Check...</button>
   function checkMembers(){
     if(isRoom){
       return <>
         <label>Public Key:</label><input value={publicKey} onChange={typePublicKey}/> 
-        <button>Grant</button>
-        <button>Revoke</button>
-
-
-        <button onClick={checkList}>Check...</button>
+        <button onClick={groupGrantPublicKey}>Grant</button>
+        <button onClick={groupRevokePublicKey}>Revoke</button>
       </>
     }
 
