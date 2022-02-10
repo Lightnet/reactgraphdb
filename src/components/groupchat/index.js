@@ -19,7 +19,7 @@ export default function GroupChat(){
 
   const [isAdmin, setIsAdmin] = useState(false);
   const [isRoom, setisRoom] = useState(false);
-  const [isPub, setIsPub] = useState(false);
+  //const [isPub, setIsPub] = useState(false);
 
   const [publicKey, setPublicKey] = useState('');
   
@@ -63,6 +63,14 @@ export default function GroupChat(){
     }
   });
 
+  useEffect(() => {
+    return ()=>{
+      if(gunGroup){
+        gunGroup.off();
+      }
+    }
+  });
+
   function typeGroupID(event){
     setGroupID(event.target.value);
   }
@@ -74,10 +82,28 @@ export default function GroupChat(){
   }
   function clickBack(){
     setisRoom(false);
+    setMessages([])
+    setShareKey('');
   }
-  function selectGroupID(event){
+
+  async function selectGroupID(event){
     console.log(event.target.value);
     setGroupID(event.target.value);
+    let groupKey = event.target.value;
+    //check for owner
+    let pub = await gun.get(groupKey).get('info').get('pub').then();
+    if(pub){
+      let user = gun.user();
+      console.log('owner...');
+      if(pub == user.is.pub){
+        setIsAdmin(true)
+      }else{
+        setIsAdmin(false);
+      }
+    }else{
+      setIsAdmin(false);
+    }
+
   }
 
   function timestamp(){
@@ -460,7 +486,7 @@ export default function GroupChat(){
 
   // <button onClick={checkList}>Check...</button>
   function checkMembers(){
-    if(isRoom){
+    if(isRoom==true && isAdmin==true){
       return <>
         <label>Public Key:</label><input value={publicKey} onChange={typePublicKey}/> 
         <button onClick={groupGrantPublicKey}>Grant</button>

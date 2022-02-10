@@ -4,6 +4,7 @@
 */
 
 // https://gun.eco/docs/User
+// https://stackoverflow.com/questions/55830414/how-to-read-text-file-in-react
 
 import { Link, useNavigate  } from "react-router-dom";
 
@@ -11,6 +12,7 @@ import React, { useEffect, useState } from "react";
 import { useGun } from "../gun/gunprovider.js";
 import { nError, nSuccess } from "../notify/notifytype.js";
 import { useNotifty } from "../notify/notifyprovider.js";
+import {isEmpty} from "../../lib/helper.js"
 
 
 export default function SignIn(){
@@ -22,6 +24,7 @@ export default function SignIn(){
   const navigate = useNavigate();
   const {setNotify} = useNotifty();
 
+  const [accessType, setAccessType] = useState('default');
   const [bPair, setBPair] = useState(false);
   const [pair, setPair] = useState('');
   
@@ -29,6 +32,65 @@ export default function SignIn(){
 
   const [userName, setUserName] = useState('');
   const [userPassword, setUserPassword] = useState('12345678');
+
+  const [selectedFile, setSelectedFile] = useState();
+	const [isSelected, setIsSelected] = useState(false);
+
+
+  function changeAccessType(event){
+    setAccessType(event.target.value);
+  }
+
+  function changeFileHandler(event){
+		setSelectedFile(event.target.files[0]);
+    console.log(event.target.files[0])
+    /*
+    const reader = new FileReader()
+    reader.onload = async (e) => { 
+      const text = (e.target.result)
+      console.log(text)
+      //alert(text)
+    };
+    reader.readAsText(event.target.files[0])
+    */
+		setIsSelected(true);
+	};
+
+  const handleFileSubmission = () => {
+    console.log(selectedFile);
+    if(!selectedFile){
+      console.log('EMPTY')
+      return;
+    }
+    const reader = new FileReader()
+    reader.onload = async (e) => { 
+      const text = (e.target.result)
+      console.log(text)
+      const txtpair = JSON.parse(text);
+      console.log(txtpair.pub);
+      if((!txtpair.pub)||(!txtpair.epub)||(!txtpair.epriv)||(!txtpair.priv)){
+        console.log('ERROR NOT SEA')
+        return;
+      }
+      let user = gun.user();
+      user.auth(txtpair, ack=>{
+        //console.log(ack);
+        setStatus('');
+        if(ack.err){
+          //setStatus(ack.err);
+          setNotify(nError(ack.err,true ))
+          return;
+        }
+        //setStatus('');
+        setNotify(nSuccess( "Signin Pass!",true ))
+        let user0 = gun.user();
+        console.log(user0)
+        setGunUser(user0.is);
+      })
+      //alert(text)
+    };
+    reader.readAsText(selectedFile)
+	};
 
   function typingName(event){
     setUserName(event.target.value);
@@ -118,69 +180,105 @@ export default function SignIn(){
     setPair(JSON.stringify(p))
   }
 
+  function viewType(){
+    if(accessType=='pair'){
+      return(
+      <tbody>
+        <tr>
+          <td>
+          <button onClick={clickCreatePair}>Create Pair</button> <label>Status:{status}</label>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label>Pair:</label>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <textarea id="pair" value={pair} onChange={typingPair}></textarea>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <button onClick={clickPair}>Submit</button>
+            <Link to='/signup'>Sign Up</Link>
+          </td>
+        </tr>
+      </tbody>
+    )}
+    if(accessType=='default'){
+      return(
+      <tbody>
+        <tr>
+          <td>
+            <label>Alias:</label>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <input value={userName} onChange={typingName}></input>
+          </td>
+        </tr>
+
+        <tr>
+          <td>
+            <label>Passphrase:</label>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <input value={userPassword} onChange={typingPassword}></input>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <button onClick={clickSumbit}>Submit</button><span> | </span>
+            <Link to='/signup'>Sign Up</Link><span> | </span>
+            <Link to='/recovery'>Recovery</Link>
+          </td>
+        </tr>
+      </tbody>
+    )}
+
+    if(accessType=='upload'){
+      return(
+      <tbody key="upload">
+        <tr>
+          <td>
+            <label>Text File:</label>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <input type="file" name="file" onChange={changeFileHandler} />
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <button onClick={handleFileSubmission}>Submit</button><span> | </span>
+            <Link to='/signup'>Sign Up</Link><span> | </span>
+            <Link to='/recovery'>Recovery</Link>
+          </td>
+        </tr>
+      </tbody>
+    )}
+    return <></>
+  }
+
   return <div>
     <div>
       <label>Pair </label>
-      <input type="checkbox" checked={bPair} onChange={checkBoxPair}></input> 
+      <select value={accessType} onChange={changeAccessType}>
+        <option value="default"> Default </option>
+        <option value="pair"> Pair </option>
+        <option value="upload"> Upload </option>
+        <option value="qrscan"> QR Scan </option>
+      </select> 
     </div>
     <div>
       <table>
-      {bPair?(
-        <tbody>
-          <tr>
-            <td>
-            <button onClick={clickCreatePair}>Create Pair</button> <label>Status:{status}</label>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label>Pair:</label>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <textarea id="pair" value={pair} onChange={typingPair}></textarea>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <button onClick={clickPair}>Submit</button>
-              <Link to='/signup'>Sign Up</Link>
-            </td>
-          </tr>
-        </tbody>
-      ):(
-        <tbody>
-          <tr>
-            <td>
-              <label>Alias:</label>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <input value={userName} onChange={typingName}></input>
-            </td>
-          </tr>
-
-          <tr>
-            <td>
-              <label>Passphrase:</label>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <input value={userPassword} onChange={typingPassword}></input>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <button onClick={clickSumbit}>Submit</button><span> | </span>
-              <Link to='/signup'>Sign Up</Link><span> | </span>
-              <Link to='/recovery'>Recovery</Link>
-            </td>
-          </tr>
-        </tbody>
-        )}
+        {viewType()}
       </table>
     </div>
   </div>

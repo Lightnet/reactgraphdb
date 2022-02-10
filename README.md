@@ -23,7 +23,10 @@ npm run devp
 
 # React:
   By using the react to handle html render elements and events.
-
+# Login:
+ - By usng login upload (testing...)
+ - Text file login base64?
+ - 
 
 # dev:
   To build simple webpack and server to deal with the gun websocket.
