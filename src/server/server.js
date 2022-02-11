@@ -6,48 +6,94 @@
 // https://www.section.io/engineering-education/how-to-setup-nodejs-express-for-react/
 // https://www.twilio.com/blog/react-app-with-node-js-server-proxy
 // https://www.youtube.com/watch?v=PNtFSVU-YTI
+// https://stackoverflow.com/questions/10849687/express-js-how-to-get-remote-client-address
+// https://expressjs.com/en/guide/behind-proxies.html
+// https://stackoverflow.com/questions/41056104/express-how-do-you-get-the-hostname-and-port-that-an-express-server-is-listenin/41056494
+// https://stackoverflow.com/questions/3653065/get-local-ip-address-in-node-js
+// https://www.grouparoo.com/blog/node-js-and-ipv6
+// https://www.pluralsight.com/guides/exposing-your-local-node-js-app-to-the-world
+
+
 import express from 'express';
 import bodyParser from 'body-parser';
 import Gun from 'gun';
 import routes from './routes.js'
 import cors from 'cors';
+import http from 'http';
+import os,{ networkInterfaces } from 'os';
+//import publicIp from 'public-ip';
+
+
+console.log("process.env.PORT: ", process.env.PORT)
+console.log("process.env.HOST: ", process.env.HOST)
+
+//console.log(await publicIp.v4());
+//console.log(await publicIp.v6());
+
+function getIPAddress() {
+  // import { networkInterfaces } from 'os';
+  var interfaces = networkInterfaces();
+  for (var devName in interfaces) {
+    var iface = interfaces[devName];
+
+    for (var i = 0; i < iface.length; i++) {
+      var alias = iface[i];
+      if (alias.family === 'IPv4' && alias.address !== '127.0.0.1' && !alias.internal)
+        return alias.address;
+    }
+  }
+  return '0.0.0.0';
+}
+
+let PORT = process.env.PORT || 3000;
+let HOST = process.env.HOST || getIPAddress();
+
+HOST = "0.0.0.0"; //allow all
+//HOST = await publicIp.v6();
+//HOST = "127.0.0.1";//not working script cors
 
 export default function App(){
-
+  console.log(getIPAddress());
   const app = express();
+  //app.enable('trust proxy');
+  app.set('trust proxy', true);
+  app.set('PORT', PORT)
+  app.set('HOST', HOST)
+  //app.set('trust proxy', true)
+  //app.set('trust proxy', 'loopback') // specify a single subnet
+  //app.options('*', cors()) // include before other routes 
   app.use(cors({
-    origin:'http://localhost:3000',
+    //origin:'*',
+    //origin:'http://127.0.0.1:3000/',
+    //origin:'http://localhost:3000',
     //methods:['GET','POST']
   }));
-
-
   app.use(bodyParser.urlencoded({ extended: false }));
-
-  app.get('/api/greeting', (req, res) => {
-    const name = req.query.name || 'World';
-    res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify({ greeting: `Hello ${name}!` }));
-  });
-
-  //app.get('/', (req, res) => {
-    //res.setHeader('Content-Type', 'application/json');
-    //res.send(JSON.stringify({ greeting: `Hello ${name}!` }));
-  //});
-
-  app.use(Gun.serve).use(express.static('public'));
-
-  //Hot reload!
-  //app.use((req, res, next) => {
-    //route(req, res, next);
-  //});
-  //app.use("*",routes);
-
+  app.use(Gun.serve).use(express.static('public'));//src=path/gun.js
   app.use(routes);
 
-  const server = app.listen(3000, () =>
-    console.log('Express server is running on localhost:3000')
-  );
+  console.log("APP PORT: ", app.get('PORT'))
+  console.log("APP HOST: ", app.get('HOST'))
 
+  //const server = app.listen(app.get('PORT'), () =>
+    //console.log(`Express server is running on http://localhost:${PORT}`)
+  //);
+
+  var server = http.createServer(app);
+  //server.listen(app.get('PORT'),'127.0.0.1',()=>{
+  server.listen(app.get('PORT'),app.get('HOST'),()=>{
+  //server.listen(app.get('PORT'),()=>{
+    console.log(`Express server is running on http://${HOST}:${PORT}`)
+    console.log(`IP address 2 on http://127.0.0.1:${PORT}`);
+    console.log(`IP address 3 on http://localhost:${PORT}`);
+    console.log("SERVER:: ",server.address())
+  });
+
+  server.on('listening', function() {
+    console.log('Express server started on port %s at %s', server.address().port, server.address().address);
+    console.log("SERVER:: ",server.address())
+  });
+  
   const gun = Gun({
     //file: 'data.json',
     web: server
@@ -59,9 +105,21 @@ export default function App(){
     //console.log('connect peer to',peer);
     console.log('peer connect!');
   });
+
   gun.on('bye', (peer)=>{// peer disconnect
     //console.log('disconnected from', peer);
     console.log('disconnected from peer!');
   });
-
 }
+/*
+  //app.get('/api/greeting', (req, res) => {
+    //const name = req.query.name || 'World';
+    //res.setHeader('Content-Type', 'application/json');
+    //res.send(JSON.stringify({ greeting: `Hello ${name}!` }));
+  //});
+
+  //app.get('/', (req, res) => {
+    //res.setHeader('Content-Type', 'application/json');
+    //res.send(JSON.stringify({ greeting: `Hello ${name}!` }));
+  //});
+*/

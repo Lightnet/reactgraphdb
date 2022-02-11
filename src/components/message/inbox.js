@@ -8,18 +8,17 @@ import { isEmpty } from "../../lib/helper.js";
 import { useGun } from "../gun/gunprovider.js"
 
 export default function InboxMessages(){
+
   const {gun} = useGun();
   const [messages,setMessages] = useState([]);
   const [contacts,setContacts] = useState([]);
-
   const [messageID, setMessageID] = useState('');
-
   const [pub,setPub] = useState('');
 
   useEffect(()=>{
     if(gun){
       let guser = gun.user();
-      console.log(guser);
+      //console.log(guser);
       setContacts([]);
       //let contracts = await guser.get('contact').once().map().once().then();
       guser.get('contact').once().map().once((data,key)=>{
@@ -42,8 +41,8 @@ export default function InboxMessages(){
   },[])
 
   function selectPub(event){
-    console.log("event.target.value");
-    console.log(event.target.value);
+    //console.log("event.target.value");
+    //console.log(event.target.value);
     setPub(event.target.value);
   }
 
@@ -68,7 +67,6 @@ export default function InboxMessages(){
 
         let UIdec = await gun.SEA.secret(who.epub, guser._.sea); // Diffie-Hellman
 
-
         await gun.get('~'+pkey)
           .get('message')
           .get(pub).once().map().once( async (data,key)=>{
@@ -76,9 +74,16 @@ export default function InboxMessages(){
             //console.log(key)
             //console.log("data")
             //console.log(data)
+            if(!data){
+              console.log("NULL U MESSAGE")
+              return;
+            }
+            if(data=="NULL"){
+              console.log("NULL MESSAGE")
+              return;
+            }
             let subject = await gun.SEA.decrypt(data.subject, UIdec);
             let content = await gun.SEA.decrypt(data.content, UIdec);
-
 
             setMessages(item=>[...item,{
               date:key,
@@ -148,7 +153,3 @@ export default function InboxMessages(){
 
   </div>
 }
-/*
-<label>Pub:{item.pub}</label>
-
-*/

@@ -24,23 +24,22 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 //module.exports = {
-
 export default env => {
-   
    return {
       //entry: path.join(__dirname,'./src/client.js'),
-      entry: path.join(__dirname, "./src/client.js"),
+      entry: path.join(__dirname, "./src/client/client.js"),
       mode: process.env.NODE_ENV || "development",
 
       output: {
          path: path.join(__dirname, '/public'),
          filename: 'bundle.js'
       },
-      devServer: {
-         port: 3000,
+      //devServer: {
+         //port: 3000,
          //contentBase: path.resolve(__dirname, './dist')
          //watchContentBase: true
-      },
+         //historyApiFallback: true
+      //},
       module: {
          noParse:/gun\.js$|sea\.js$/,
          rules: [

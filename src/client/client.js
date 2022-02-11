@@ -10,7 +10,7 @@ import Style from '../style/globals.css'
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import MyApp from "./app.js";
+import MyApp from "../components/app.js";
 
 /*
 import Gun from 'gun/gun';

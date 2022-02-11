@@ -1,6 +1,11 @@
 /*
   LICENSE: MIT
   Created by: Lightnet
+
+  By using user > message > pub > timestamp
+
+  normal mail but require contact to be working and added to friend list
+
 */
 
 import React from "react";
@@ -24,7 +29,6 @@ export default function MessagePage(){
     <Routes>
       <Route path="/" element={<InboxMessages />} />
       <Route path="/compose" element={<ComposeMessage />} />
-      
     </Routes>
   </>
 }

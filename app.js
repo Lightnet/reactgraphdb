@@ -9,7 +9,5 @@
 // https://www.npmjs.com/package/livereload
 // https://dev.to/rajeshroyal/how-to-live-reload-node-js-server-along-with-hot-reloading-2im0
 import App from './src/server/server.js';
-
 App();
-
-console.log('web server...');
+//console.log('[END] Web Server');

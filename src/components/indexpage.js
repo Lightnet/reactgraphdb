@@ -16,10 +16,11 @@ import ChatPage from './chat/index.js';
 import { useGun } from './gun/gunprovider.js';
 import HomePage from './home/index.js';
 import AccessNavBarTop from './layout/accessnavbar.js';
-import MessagePage from './message/index.js';
+import MessagePage from './message/messagepage.js';
 import GetHintPage from './account/gethint.js';
 import NotifyManager from './notify/notifymanager.js';
 import GroupChat from './groupchat/index.js';
+import GraphPage from './graph/graphpage.js';
 
 export default function IndexPage(){
 
@@ -47,6 +48,7 @@ export default function IndexPage(){
           <Route path="/message/*" element={<MessagePage />} />
           <Route path="/groupchat/*" element={<GroupChat />} />
           <Route path="/chat/*" element={<ChatPage />} />
+          <Route path="/graph/*" element={<GraphPage />} />
           <Route path="/signout" element={<SignOut />} />
         </Routes>
       </>
