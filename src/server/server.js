@@ -13,22 +13,19 @@
 // https://www.grouparoo.com/blog/node-js-and-ipv6
 // https://www.pluralsight.com/guides/exposing-your-local-node-js-app-to-the-world
 
-
 import express from 'express';
 import bodyParser from 'body-parser';
 import Gun from 'gun';
 import routes from './routes.js'
 import cors from 'cors';
 import http from 'http';
-import os,{ networkInterfaces } from 'os';
+import { networkInterfaces } from 'os';
 //import publicIp from 'public-ip';
-
+//console.log(await publicIp.v4());
+//console.log(await publicIp.v6());
 
 console.log("process.env.PORT: ", process.env.PORT)
 console.log("process.env.HOST: ", process.env.HOST)
-
-//console.log(await publicIp.v4());
-//console.log(await publicIp.v6());
 
 function getIPAddress() {
   // import { networkInterfaces } from 'os';
@@ -48,19 +45,27 @@ function getIPAddress() {
 let PORT = process.env.PORT || 3000;
 let HOST = process.env.HOST || getIPAddress();
 
+//PORT = 80;
 HOST = "0.0.0.0"; //allow all
 //HOST = await publicIp.v6();
-//HOST = "127.0.0.1";//not working script cors
-
+//HOST = "127.0.0.1"; //not working script cors
+// https://stackoverflow.com/questions/23413401/what-does-trust-proxy-actually-do-in-express-js-and-do-i-need-to-use-it
 export default function App(){
-  console.log(getIPAddress());
+  console.log("PC ip address:",getIPAddress());
   const app = express();
   //app.enable('trust proxy');
-  app.set('trust proxy', true);
-  app.set('PORT', PORT)
-  app.set('HOST', HOST)
   //app.set('trust proxy', true)
   //app.set('trust proxy', 'loopback') // specify a single subnet
+  //app.set('trust proxy', '127.0.0.1');
+  app.set('trust proxy', function (ip) {
+    console.log("trust proxy: ",ip);
+    if (ip === '127.0.0.1' || ip === '123.123.123.123' || getIPAddress()) return true // trusted IPs
+    else return false
+  })
+
+  app.set('PORT', PORT)
+  app.set('HOST', HOST)
+  
   //app.options('*', cors()) // include before other routes 
   app.use(cors({
     //origin:'*',
@@ -83,15 +88,19 @@ export default function App(){
   //server.listen(app.get('PORT'),'127.0.0.1',()=>{
   server.listen(app.get('PORT'),app.get('HOST'),()=>{
   //server.listen(app.get('PORT'),()=>{
-    console.log(`Express server is running on http://${HOST}:${PORT}`)
-    console.log(`IP address 2 on http://127.0.0.1:${PORT}`);
-    console.log(`IP address 3 on http://localhost:${PORT}`);
-    console.log("SERVER:: ",server.address())
+    console.log('init listen...')
+    //console.log("SERVER:: ",server.address())
   });
 
   server.on('listening', function() {
+    let localhost = getIPAddress();
+    console.log(`IP address 0 on http://${localhost}:${PORT} <- PC IP`);
+    console.log(`IP address 1 on http://${HOST}:${PORT}`)
+    console.log(`IP address 2 on http://127.0.0.1:${PORT} `);
+    console.log(`IP address 3 on http://localhost:${PORT} <- Default for dev testing...`);
+    console.log(`IP address 4 on http://localhost:${PORT}/ip <- IP Test`);
     console.log('Express server started on port %s at %s', server.address().port, server.address().address);
-    console.log("SERVER:: ",server.address())
+    //console.log("SERVER:: ",server.address())
   });
   
   const gun = Gun({
@@ -111,15 +120,3 @@ export default function App(){
     console.log('disconnected from peer!');
   });
 }
-/*
-  //app.get('/api/greeting', (req, res) => {
-    //const name = req.query.name || 'World';
-    //res.setHeader('Content-Type', 'application/json');
-    //res.send(JSON.stringify({ greeting: `Hello ${name}!` }));
-  //});
-
-  //app.get('/', (req, res) => {
-    //res.setHeader('Content-Type', 'application/json');
-    //res.send(JSON.stringify({ greeting: `Hello ${name}!` }));
-  //});
-*/

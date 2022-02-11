@@ -4,11 +4,26 @@
 # Information:
   To build stand alone client by using the react.js, babel, webpack, express, gun.js and other packages to develop web application. For test build for application, game stand alone, testing logic and other things.
 
-  By using gun.js graph database format. To query data information. By using the node graph to link to each other nodes.
+  By using gun.js graph database format. To query data information.
 
   It does suppoert peer to peer graph when snyc when link to url address by web socket format.
 
-  By using the gun.js and react.js to handle get and put data with SEA checks to prevent override incase of user edit graph without permission.
+  By using the gun.js and react.js to handle get and put data with SEA checks to prevent override incase of user edit graph without permission as well the user interface.
+
+# Layout:
+```
+src
+  client ( browser ) 
+  components (react.js / gun.js / browser)
+  lib (helper / database / browser / server)
+  server (web server)
+  style (browser)
+.babelrc (babel.js)
+app.js (init server)
+serverbrowsersync.js ( reload browser watch / not used / package threat)
+watchlivereload.js ( reload browser watch / not used)
+webpack.config.js (watch babel browser client build bundle.js)
+```
 
 # guide:
 ```
@@ -152,3 +167,7 @@ export default function BlankPage(){
   </>
 }
 ```
+# Dev local network
+  Note that firewall or other program monitor the network will block the local address access.
+
+  Note two that http:// will redirect to https://

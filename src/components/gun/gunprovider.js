@@ -36,8 +36,15 @@ export function GunProvider(props){
       //gun = Gun('http://localhost:3000/gun');
       
       //let gunp = Gun();
+      console.log(location)
+      let host = location.origin;
+      if(location.host=='localhost'){
+        host='http://localhost/gun';
+      }else{
+        host=host+"/gun";
+      }
       let gunp = Gun({
-        peers:['http://localhost:3000/gun']
+        peers:[host]
         , localStorage: false
       });
       //gun = Gun();

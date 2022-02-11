@@ -1,6 +1,10 @@
 /*
   LICENSE: MIT
   Created by: Lightnet
+
+  Information:
+    This sectoin handle the context provider varaibles and functions.
+    Top layer for passing to children components.
 */
 
 // https://reactrouter.com/docs/en/v6/getting-started/tutorial
@@ -20,6 +24,3 @@ export default function MyApp(){
     </GunProvider>
   </BrowserRouter>
 }
-/*
-<label>Hello World! React!</label>
-*/

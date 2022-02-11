@@ -6,8 +6,9 @@
 // https://lostechies.com/derekgreer/2017/05/25/hello-react-a-beginners-setup-tutorial/
 
 console.log('Start React:',0);
-import Style from '../style/globals.css'
+//import "@babel/polyfill";
 
+import Style from '../style/globals.css'
 import React from 'react';
 import ReactDOM from 'react-dom';
 import MyApp from "../components/app.js";
