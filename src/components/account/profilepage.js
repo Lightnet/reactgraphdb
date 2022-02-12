@@ -9,16 +9,13 @@ import { useGun } from "../gun/gunprovider.js";
 import { useNotifty } from "../notify/notifyprovider.js";
 import { nSuccess, nWarning } from "../notify/notifytype.js";
 import PublicKey from "./publickey.js";
+import SeaPair from "./seapair.js";
 import SearchPublicKey from "./searchpublickey.js";
 
 export default function ProfilePage(){
 
   const {gun, gunUser}=useGun();
   const {setNotify} = useNotifty();
-
-  const refPub = useRef(null);
-
-  const [pub,setPub] = useState('');
 
   const [alias,setAlias] = useState('');
   const [information,setInformation] = useState('');
@@ -28,14 +25,10 @@ export default function ProfilePage(){
 
   useEffect( async() => {
     if(gun){
-      let user = gun.user().is.alias;
+      //let user = gun.user().is.alias;
       //setAlias(user);
-      let pkey = gun.user().is.pub;
-      if(pkey){
-        setPub(pkey);
-      }
       
-      user = gun.user();
+      const user = gun.user();
       let alias = await user.get('alias').then();
       if(alias){
         setAlias(alias);
@@ -97,25 +90,17 @@ export default function ProfilePage(){
   function clickRename(){
     if(gun){
       let user = gun.user();
-      console.log(user);
+      //console.log(user);
       user.get('alias').put(alias,ack=>{
         console.log(ack);
       });
     }
   }
-  //https://stackoverflow.com/questions/39501289/in-reactjs-how-to-copy-text-to-clipboard
-  function copyPubKey(e){
-    if(refPub){
-      console.log(refPub)
-      //refPub.focus();
-      refPub.current.focus();
-      refPub.current.select();
-      document.execCommand('copy');
-    }
-  }
+
   // <label>[Public Key:]</label> <input ref={refPub} value={pub} readOnly /> <button onClick={copyPubKey}>Copy</button>
   return <>
     <label>Profile</label> <br />
+    <SeaPair /><br />
     <PublicKey _isVisible={true} /> <br />
     <label>Alias:</label> <input value={alias} onChange={changeAlias}/>  <button onClick={clickRename}> Rename </button><br />
     <label>Information:</label> <input value={information} onChange={updateInfo}/> <br />

@@ -5,7 +5,7 @@
 
 // https://stackoverflow.com/questions/2887101/apply-style-to-range-of-text-with-javascript-in-uiwebview
 // https://stackoverflow.com/questions/60217202/copy-text-to-clipboard-now-that-execcommandcopy-is-obsolete
-
+// //https://stackoverflow.com/questions/39501289/in-reactjs-how-to-copy-text-to-clipboard
 import React, { useEffect, useRef, useState } from "react";
 import {useGun} from "../gun/gunprovider.js";
 
@@ -18,7 +18,7 @@ export default function PublicKey({_isVisible}){
   const refPub = useRef(null);
 
   useEffect(()=>{
-    console.log(_isVisible)
+    //console.log(_isVisible)
     if(_isVisible!=null){
       setIsVisible(true)
     }
@@ -27,24 +27,13 @@ export default function PublicKey({_isVisible}){
   function clickIsVisible(){
     let b = !isVisible;
     setIsVisible(b)
-    /*
-    if(b){
-      if(gunUser){
-        console.log("gunUser",gunUser)
-        setPub(gunUser.pub);
-      }
-      //setPub();
-    }else{
-      setPub('')
-    }
-    */
   }
 
   useEffect(()=>{
-    console.log(isVisible)
+    //console.log(isVisible)
     if(isVisible){
       if(gunUser){
-        console.log("gunUser",gunUser)
+        //console.log("gunUser",gunUser)
         setPub(gunUser.pub);
       }
       //setPub();
@@ -57,11 +46,11 @@ export default function PublicKey({_isVisible}){
     if(refPub){
       //console.log(refPub)
       //refPub.focus();
-      refPub.current.focus();
-      refPub.current.select();
+      //refPub.current.focus();
+      //refPub.current.select();
       if (!navigator.clipboard){
         console.log('clipboard NULL');
-        document.execCommand('copy');//out date function
+        //document.execCommand('copy');//out date function
       } else{
         navigator.clipboard.writeText(pub).then(
           function(){
