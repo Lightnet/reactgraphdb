@@ -14,10 +14,37 @@
 import React, { useEffect, useState } from "react";
 import { useGun } from "../gun/gunprovider.js";
 
-function GunGraph({props,gunKey,gunValue}){
+function GunGraph({props,gunKey,gunValue,_gun}){
+
   const {gun} = useGun();
   const [isDisplayJson, setIsDisplayJson] = useState(false);
-  const [gValue,setGValue] = useState('');
+  const [gValue,setGValue] = useState({});
+  const [gKey,setGKey] = useState('');
+  const [gunNode,setGunNode] = useState({});
+  const [gunObject,setGunObject] = useState(null);
+  const [jsonObject,setJsonObject] = useState([]);
+
+  const [isOnce, setIsOnce] = useState(false);
+
+
+  useEffect(()=>{
+    //console.log('CHECKING::..')
+    if((gunKey != null)&&(_gun == null)){
+      //console.log('TOP')
+      let _g = gun.get(gunKey);
+      setGunNode(_g);
+    }else{
+      //console.log('BRANCH')
+      let _g = _gun.get(gunKey);
+      setGunNode(_g);
+    }
+  },[gunKey,_gun])
+
+  //useEffect(()=>{
+    //if(_gun){
+      //setGunNode(_gun)
+    //}
+  //},[_gun])
 
   useEffect(()=>{
     if(gunValue){
@@ -25,28 +52,71 @@ function GunGraph({props,gunKey,gunValue}){
     }
   },[gunValue])
 
-  function displayJson(){
-    setIsDisplayJson(state=>!state);
+  async function displayJson(){
+    let b = !isDisplayJson;
+    setIsDisplayJson(b);
+    console.log("displayJson",b);
+    if(b){
+      let obj = await gunNode.once().then();
+      console.log("OBJ: ",obj)
+      setGunObject(obj)
+      setGValue(JSON.stringify(obj))
+    }
+  }
+
+  async function clickIsOnce(){
+    let b = !isOnce;
+    setIsOnce(b);
+    if(b){
+      let obj = await gunNode.once().then();
+      setGunObject(obj)
+      let __graph=[]
+      for (let key in obj) {
+        if (obj.hasOwnProperty(key)) {
+          //console.log(key);
+          __graph.push({key:key,value:obj[key]});
+        }
+      }
+      setJsonObject(__graph);
+    }
   }
 
   function viewGValue(){
     if(isDisplayJson){
-      return <textarea value={gValue} readOnly>
-      </textarea>
+      return <textarea value={gValue} readOnly></textarea>
     }
     return <></>
   }
 
-  function clickLog(){
-    console.log(gunValue);
+  function viewOnce(){
+    if(isOnce){
+      return jsonObject.map((item)=>{
+        return <GunGraph key={item.key} gunKey={item.key} _gun={gunNode}  ></GunGraph>
+      })
+    }
+    return <></>
+  }
+
+  async function clickLog(){
+    //console.log(gunValue);
+    if(!gunObject){
+      let obj = await gunNode.once().then();
+      setGunObject(obj)
+      console.log(obj);
+      return;
+    }
+    console.log(gunObject);
   }
 
   return (<div {...props}>
     <label>Key:{gunKey}</label> 
-    <button onClick={displayJson}>View</button>
+    <button onClick={displayJson}>View: {String(isDisplayJson)}</button> 
+    <button onClick={clickIsOnce}>Once: {String(isOnce)}</button> 
     <button onClick={clickLog}>Log</button>
     <br />
     {viewGValue()}
+    {viewOnce()}
+    
   </div>)
 }
 
@@ -61,7 +131,6 @@ export default function GraphPage(){
       let __graph=[]
       for (let key in _graph) {
         if (_graph.hasOwnProperty(key)) {
-          //_graph[key] *= 2;
           //console.log(key);
           __graph.push({key:key,value:_graph[key]});
         }
@@ -80,33 +149,16 @@ export default function GraphPage(){
     console.log(graph)
   }
 
-  function clickQuery1(){
-    gun.get('undefinedC5oSKZIQgvC02A3tPXVno4CdVAuRwnWK/message/1643000425').once((ack)=>{
-      console.log(ack);
-    });
-  }
   return <>
     <button onClick={clickGetGraph}> Graph </button>
     <button onClick={clickGraphDB}> Graph DB </button>
-    <button onClick={clickQuery1}> Test1 </button>
     <div>
       {
         graph.map((item)=>{
           //console.log(item);
-          return (<GunGraph key={item.key} gunKey={item.key} gunValue={item.value}>
-          </GunGraph>)
+          return (<GunGraph key={item.key} gunKey={item.key} ></GunGraph>)
         })
-        /*
-        graph.map((item)=>{
-          console.log(item);
-          return (<div key={item.key}>
-            <label>Key:{item.key}</label><br />
-            
-          </div>)
-        })
-        */
       }
-
     </div>
   </>
 }

@@ -30,7 +30,7 @@ export default function SignIn(){
   
   const [status, setStatus] = useState('');
 
-  const [userName, setUserName] = useState('');
+  const [userName, setUserName] = useState('q');
   const [userPassword, setUserPassword] = useState('12345678');
 
   const [selectedFile, setSelectedFile] = useState();
