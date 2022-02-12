@@ -8,6 +8,7 @@ import { useGun } from "../gun/gunprovider.js";
 
 import { useNotifty } from "../notify/notifyprovider.js";
 import { nSuccess, nWarning } from "../notify/notifytype.js";
+import PublicKey from "./publickey.js";
 import SearchPublicKey from "./searchpublickey.js";
 
 export default function ProfilePage(){
@@ -112,10 +113,10 @@ export default function ProfilePage(){
       document.execCommand('copy');
     }
   }
-
+  // <label>[Public Key:]</label> <input ref={refPub} value={pub} readOnly /> <button onClick={copyPubKey}>Copy</button>
   return <>
     <label>Profile</label> <br />
-    <label>[Public Key:]</label> <input ref={refPub} value={pub} readOnly /> <button onClick={copyPubKey}>Copy</button>  <br />    
+    <PublicKey _isVisible={true} /> <br />
     <label>Alias:</label> <input value={alias} onChange={changeAlias}/>  <button onClick={clickRename}> Rename </button><br />
     <label>Information:</label> <input value={information} onChange={updateInfo}/> <br />
     <label>Skills:</label> <input value={skills} onChange={updateSkills}/> <br />
@@ -128,5 +129,4 @@ export default function ProfilePage(){
 }
 /*
 
-<
 */

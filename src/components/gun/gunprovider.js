@@ -21,7 +21,7 @@ export const gunContext = createContext();
 export function useGun(){
   const context = useContext(gunContext);
   if (!context) {
-    throw new Error(`useGun must be used within a UserContext`)
+    throw new Error(`useGun must be used within a gunContext`)
   }
   return context;
 }

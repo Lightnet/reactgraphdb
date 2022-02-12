@@ -16,9 +16,16 @@
 
   By using gun.js graph database format. To query data information.
 
-  It does suppoert peer to peer graph when snyc when link to url address by web socket format.
+  It does support peer to peer graph when snyc when link to url address by web socket format.
 
   By using the gun.js and react.js to handle get and put data with SEA checks to prevent override in case of user edit graph without permission as well the user interface.
+
+# dev:
+ - web browser reload for files changes. (removed)
+ - navigator.clipboard
+  - copy
+  - paste (required permission browser to do paste)
+ - To build simple webpack and server to deal with the gun websocket and peer to peer network.
 
 # Features:
   - Account used by SEA.js from gun package.
@@ -55,13 +62,12 @@ watchlivereload.js ( reload browser watch / not used)
 webpack.config.js (watch babel react browser client build bundle.js)
 ```
 
-# guide:
+# Guide:
 
 ```
 install nodejs 16.x
 ```
-
-
+  Install nodejs program to able to install packages.
 ```
 npm install
 ```
@@ -73,21 +79,16 @@ npm run dev
   Run web server, webpack 5.x complie and watch file change.
 
 # Project:
-  The project is in strict mode that require ./index.js and not ./index as it need ext file checks.
+  The project is in strict mode that require ./index.js and not ./index as it need ext file checks. reason is filename ext may different in filename.js, filename.mjs, filename.jsx, and etc.
 
   Package.json is set to module by "type":"module" for import to work for babel.js.
 
   Note that require() does not work when used type module. Need to use import to get the server and client working correctly.
 
-# React:
-  By using the react to handle html render elements and events.
-
-# dev:
-  To build simple webpack and server to deal with the gun websocket.
-
-  Added web browser reload for files changes. (removed)
-
 ## Links:
+ - https://gun.eco/docs/API
+ - https://gun.eco/docs/SEA
+ - https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
  - https://reactrouter.com
  - https://reactjs.org/
    - https://reactjs.org/docs/hooks-reference.html
@@ -139,23 +140,20 @@ export function GunProvider(props){
 
   useEffect(()=>{
       //gun = Gun('http://localhost:3000/gun');
-      //let gunp = Gun();
       let gunp = Gun({
         peers:['http://localhost:3000/gun']
       });
       gunp.on('hi', peer => {//peer connect
-        //console.log('connect peer to',peer);
         console.log('peer connect!');
       });
       gunp.on('bye', (peer)=>{// peer disconnect
-        //console.log('disconnected from', peer);
         console.log('disconnected from peer!');
       });
       gunp.SEA = Gun.SEA;
       setGun(gunp);
   },[])
 
-  const value = useMemo(()=>({
+  const value = useMemo(()=>({ // deal with reused call
     gun, setGun,
     gunUser, setGunUser
   }),[

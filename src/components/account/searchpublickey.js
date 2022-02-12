@@ -3,6 +3,8 @@
   Created by: Lightnet
 */
 
+// https://w3c.github.io/clipboard-apis/#navigator-clipboard
+
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { useGun } from "../gun/gunprovider.js";
 
@@ -82,9 +84,20 @@ export default function SearchPublicKey(){
     }
   }
 
+  function clickPubPaste(){
+    if (!navigator.clipboard){
+      console.log('clipboard NULL');
+    }else{
+      navigator.clipboard.readText().then(function(data) {
+        console.log("Your string: ", data);
+        setPub(data);
+      });
+    }
+  }
+
   return <>
     <label>Search:</label> <br />
-    <label>[Public Key:]</label> <input value={pub} onChange={searchPubKey} onKeyUp={pressPubKey}/>  <br />
+    <label>[Public Key:]</label> <input value={pub} onChange={searchPubKey} onKeyUp={pressPubKey}/><button onClick={clickPubPaste}> Paste </button>  <br />
     <label>[status]:</label> <label>{status} </label>  <br />
 
     <label>Alias:</label> <input value={alias} readOnly /> <br />
