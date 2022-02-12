@@ -11,71 +11,69 @@
 // https://stackoverflow.com/questions/14810506/map-function-for-objects-instead-of-arrays
 // https://stackoverflow.com/questions/52699646/react-redux-app-invalid-attempt-to-spread-non-iterable-instance-issue
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useGun } from "../gun/gunprovider.js";
+
+function GunGraph({props,gunKey,gunValue}){
+  const {gun} = useGun();
+  const [isDisplayJson, setIsDisplayJson] = useState(false);
+  const [gValue,setGValue] = useState('');
+
+  useEffect(()=>{
+    if(gunValue){
+      setGValue(JSON.stringify(gunValue))
+    }
+  },[gunValue])
+
+  function displayJson(){
+    setIsDisplayJson(state=>!state);
+  }
+
+  function viewGValue(){
+    if(isDisplayJson){
+      return <textarea value={gValue} readOnly>
+      </textarea>
+    }
+    return <></>
+  }
+
+  function clickLog(){
+    console.log(gunValue);
+  }
+
+  return (<div {...props}>
+    <label>Key:{gunKey}</label> 
+    <button onClick={displayJson}>View</button>
+    <button onClick={clickLog}>Log</button>
+    <br />
+    {viewGValue()}
+  </div>)
+}
 
 export default function GraphPage(){
 
   const {gun} = useGun();
   const [graph, setGraph] = useState([]);
 
+  useEffect(()=>{
+    if(gun){
+      let _graph = gun._.graph;
+      let __graph=[]
+      for (let key in _graph) {
+        if (_graph.hasOwnProperty(key)) {
+          //_graph[key] *= 2;
+          //console.log(key);
+          __graph.push({key:key,value:_graph[key]});
+        }
+      }
+      setGraph(__graph);
+    }
+  },[])
+
   function clickGetGraph(){
     console.log(gun);
     console.log(gun._.graph);
     console.log(typeof gun._.graph);
-    setGraph(gun._.graph)
-    //gun._.graph.map((item)=>{
-      //console.log(item)
-      //return item;
-    //})
-    let _graph = gun._.graph;
-    //Object.keys(_graph).map(function(key, index) {
-      //console.log(key)
-      //console.log(_graph[key])
-      //_graph[key] *= 2;
-    //});
-    //setGraph
-    let count = 0;
-    
-    var ownProps = Object.keys( _graph )
-    console.log(ownProps.length);
-
-    let __graph=[]
-    for (var key in _graph) {
-      if (_graph.hasOwnProperty(key)) {
-        //_graph[key] *= 2;
-        console.log(key);
-        __graph.push({key:key,value:_graph[key]});
-        //if(key.search('~')){
-          //console.log('found');
-          //try{
-            //__graph.push({key:key,value:_graph[key]});
-            //setGraph(item=>[...item,{key:key,value:_graph[key]} ])
-            //setGraph(item=>[...item,{key:key} ])
-            //setGraph(item=>[...item,{value:_graph[key]} ])
-          //}catch(e){
-            //console.log(e.message)
-          //}
-        //}else{
-          //console.log('not found');
-        //}
-      }
-    }
-    setGraph(__graph);
-    /*
-    Object.entries(_graph).map(  function(([key, value]), index){
-      //console.log(key)
-      //console.log(_graph[key])
-      //count++;
-      console.log(count)
-      if(count >200){
-        return;
-      }
-      if(_graph.hasOwnProperty(key)){
-        setGraph(item=>[...item,{key:key,value:_graph[key]} ])
-      }
-    });
-    */
   }
 
   function clickGraphDB(){
@@ -92,7 +90,22 @@ export default function GraphPage(){
     <button onClick={clickGraphDB}> Graph DB </button>
     <button onClick={clickQuery1}> Test1 </button>
     <div>
-
+      {
+        graph.map((item)=>{
+          //console.log(item);
+          return (<GunGraph key={item.key} gunKey={item.key} gunValue={item.value}>
+          </GunGraph>)
+        })
+        /*
+        graph.map((item)=>{
+          console.log(item);
+          return (<div key={item.key}>
+            <label>Key:{item.key}</label><br />
+            
+          </div>)
+        })
+        */
+      }
 
     </div>
   </>
