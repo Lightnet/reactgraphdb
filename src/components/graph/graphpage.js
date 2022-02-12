@@ -7,6 +7,9 @@
 
     Loop overload when using setGraph(item=>[...item,{key:key,value:_graph[key]} ]) that more then +200 query
 
+    Bugs: 
+    -Key id if same for child down error 
+    -when used await gun.get('').get('').once().then(); It does not load after children down.
 */
 // https://stackoverflow.com/questions/14810506/map-function-for-objects-instead-of-arrays
 // https://stackoverflow.com/questions/52699646/react-redux-app-invalid-attempt-to-spread-non-iterable-instance-issue
@@ -29,6 +32,14 @@ function GunGraph({props,gunKey,gunValue,_gun}){
 
   useEffect(()=>{
     //console.log('CHECKING::..')
+    /*
+    if(gunKey){
+      setGKey(gunKey);
+      const _g = gun.get(gunKey);
+      setGunNode(_g);
+    }
+    */
+    
     if((gunKey != null)&&(_gun == null)){
       //console.log('TOP')
       let _g = gun.get(gunKey);
@@ -38,6 +49,7 @@ function GunGraph({props,gunKey,gunValue,_gun}){
       let _g = _gun.get(gunKey);
       setGunNode(_g);
     }
+    
   },[gunKey,_gun])
 
   //useEffect(()=>{
@@ -55,12 +67,42 @@ function GunGraph({props,gunKey,gunValue,_gun}){
   async function displayJson(){
     let b = !isDisplayJson;
     setIsDisplayJson(b);
-    console.log("displayJson",b);
+    //console.log("displayJson",b);
     if(b){
-      let obj = await gunNode.once().then();
-      console.log("OBJ: ",obj)
+      console.log(gunNode);
+      gunNode.once(obj=>{
+        console.log(typeof obj)
+        if(!obj){
+          setGValue('null')
+          return;
+        }
+        console.log(obj)
+        setGunObject(obj)
+        if(typeof obj == 'object'){
+          setGValue(JSON.stringify(obj))
+        }else{
+          setGValue(String(obj))
+        }
+      })
+
+      /*
+      let obj = await gunNode.once().then(); // does not work when loop in children or load correctly
+      //console.log("OBJ: ",obj)
+      console.log(obj)
       setGunObject(obj)
-      setGValue(JSON.stringify(obj))
+      for (let key in obj) {
+        if (obj.hasOwnProperty(key)) {
+          console.log(key);
+          //__graph.push({key:key,value:obj[key]});
+        }
+      }
+      console.log(typeof obj);
+      if(typeof obj == 'object'){
+        setGValue(JSON.stringify(obj))
+      }else{
+        setGValue(obj)
+      }
+      */
     }
   }
 
@@ -68,6 +110,28 @@ function GunGraph({props,gunKey,gunValue,_gun}){
     let b = !isOnce;
     setIsOnce(b);
     if(b){
+      gunNode.once(obj=>{
+        if(!obj){
+          return;
+        }
+        console.log(obj);
+        console.log(typeof obj);
+        setGunObject(obj)
+        if(typeof obj == 'object'){
+          let __graph=[]
+          for (let key in obj) {
+            if (obj.hasOwnProperty(key)) {
+              //console.log(key);
+              __graph.push({key:key,value:obj[key]});
+            }
+          }
+          setJsonObject(__graph);
+        }else{
+          setJsonObject(item=>[...item,{key:obj}]);
+        }
+      })
+
+      /*
       let obj = await gunNode.once().then();
       setGunObject(obj)
       let __graph=[]
@@ -78,6 +142,7 @@ function GunGraph({props,gunKey,gunValue,_gun}){
         }
       }
       setJsonObject(__graph);
+      */
     }
   }
 
@@ -91,7 +156,8 @@ function GunGraph({props,gunKey,gunValue,_gun}){
   function viewOnce(){
     if(isOnce){
       return jsonObject.map((item)=>{
-        return <GunGraph key={item.key} gunKey={item.key} _gun={gunNode}  ></GunGraph>
+        //return <GunGraph key={item.key} gunKey={gKey+"/"+item.key} _gun={gunNode} />
+        return <GunGraph key={item.key} gunKey={item.key} _gun={gunNode} />
       })
     }
     return <></>
