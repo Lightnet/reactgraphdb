@@ -1,5 +1,15 @@
 # react graph db
 
+# Packages:
+ * express (web server / cors)
+ * gun (graph database)
+ * react (browser client render ui and components)
+ * nanoid (random string id)
+ * dayjs (time stamp)
+ * @babel/core (use import )
+ * nodemon (auto detect file changes)
+ * npm-run-all (deal with npm cmd run )
+ * webpack 5.x (compile babel and react js to browser js to understand it)
 
 # Information:
   To build stand alone client by using the react.js, babel, webpack, express, gun.js and other packages to develop web application. For test build for application, game stand alone, testing logic and other things.
@@ -8,16 +18,36 @@
 
   It does suppoert peer to peer graph when snyc when link to url address by web socket format.
 
-  By using the gun.js and react.js to handle get and put data with SEA checks to prevent override incase of user edit graph without permission as well the user interface.
+  By using the gun.js and react.js to handle get and put data with SEA checks to prevent override in case of user edit graph without permission as well the user interface.
+
+# Features:
+  - Account used by SEA.js from gun package.
+    - user login (added)
+    - sea login (added)
+    - qr login (not added)
+    - hint get/set
+    - change passphrase
+    - Text file login base64?
+    - user edit their data when sign in.
+  - simple public chat (added)
+  - group chat (grant, revoke public key id, create, delete?) (added)
+  - gun graph (current access from local storage or peer to peer update by network sync)
+  - message (added)( inbox type / wip)
+  - private message (not added )
+  - sea tools (fully custom format for export to import for chat message)
+  - theme color (not added)
+  - notify (added)
+  - modal (added / wip)
+  - post (not added )
 
 # Layout:
 ```
 src
-  client ( browser ) 
-  components (react.js / gun.js / browser)
-  lib (helper / database / browser / server)
-  server (web server)
-  style (browser)
+  -client ( browser ) 
+  -components (react.js / gun.js / browser)
+  -lib (helper / database / browser / server)
+  -server (web server)
+  -style (browser)
 .babelrc (babel.js)
 app.js (init server)
 serverbrowsersync.js ( reload browser watch / not used / package threat)
@@ -26,9 +56,21 @@ webpack.config.js (watch babel browser client build bundle.js)
 ```
 
 # guide:
+
+```
+install nodejs 
+```
+
+
+```
+npm install
+```
+  Install the package by cmd in current project folder.
+
 ```
 npm run dev
 ```
+  Run web server, webpack 5.x complie and watch file change.
 
 # Project:
   The project is in strict mode that require ./index.js and not ./index as it need ext file checks.
@@ -39,23 +81,17 @@ npm run dev
 
 # React:
   By using the react to handle html render elements and events.
-# Login:
- - By usng login upload (testing...)
- - Text file login base64?
- - 
 
 # dev:
   To build simple webpack and server to deal with the gun websocket.
 
-  Added web browser reload for files changes.
+  Added web browser reload for files changes. (removed)
 
 ## Links:
  - https://reactrouter.com
  - https://reactjs.org/
    - https://reactjs.org/docs/hooks-reference.html
    - https://reactjs.org/docs/hooks-reference.html#usecontext  Ref. GunProvider
-
-
 
 App.js entry point
 ```js
@@ -143,7 +179,7 @@ export default function BlankPage(){
     if(gun){
 
     }
-    return ()=>{ //unmount event
+    return ()=>{ //unmount event and clean up
 
     }
   },[]);
@@ -167,7 +203,6 @@ export default function BlankPage(){
   </>
 }
 ```
-# Dev local network
-  Note that firewall or other program monitor the network will block the local address access.
-
-  Note two that http:// will redirect to https://
+# Dev local network:
+ - The firewall or other program monitor the network will block the local address access.
+ - Two that http:// will redirect to https:// it depend on the broswer will force to change the secure one.
