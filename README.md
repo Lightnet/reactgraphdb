@@ -14,11 +14,9 @@
 # Information:
   To build stand alone client by using the react.js, babel, webpack, express, gun.js and other packages to develop web application. For test build for application, game stand alone, testing logic and other things.
 
-  By using gun.js graph database format. To query data information.
+  By using gun.js graph database and peer to peer (not work on it) that used websocket or http in server side. Server will not used secret keys, cookies, sessions as the database is public and private keys. As for the client will use web socket. To query data information. Learn more about the in https://gun.eco/docs/API or https://github.com/amark/gun.
 
-  It does support peer to peer graph when snyc when link to url address by web socket format.
-
-  By using the gun.js and react.js to handle get and put data with SEA checks to prevent override in case of user edit graph without permission as well the user interface.
+  Using the react.js to build UI and components to handle get and put data with SEA checks to prevent override in case of user edit graph without permission as well the user interface.
 
 # dev:
  - web browser reload for files changes. (removed)
