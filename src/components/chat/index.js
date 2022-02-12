@@ -4,12 +4,13 @@
 */
 
 import React, { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { isEmpty, unixTime } from "../../lib/helper.js";
 import { useGun } from "../gun/gunprovider.js";
 
 export default function ChatPage(){
 
-  const{gun} = useGun();
+  const{gun, gunUser} = useGun();
   const [inputMessage, setInputMessage] = useState('');
   const [messages, setMessage] = useState([]);
   const [chat, setChat] = useState(null);
@@ -19,6 +20,12 @@ export default function ChatPage(){
   let sec = '';
 
   const divRref = useRef(null);
+
+  if(!gunUser){
+    return <>
+      <Link to="/signin">Sign In</Link>
+    </>
+  }
 
   useEffect(async()=>{
     let enc = await SEA.work("public","chat"); //encrypttion key default?

@@ -26,36 +26,30 @@ import GraphPage from './graph/graphpage.js';
 
 import { useGun } from './gun/gunprovider.js';
 import NotifyManager from './notify/notifymanager.js';
+import SettingsPage from './settings/settingspage.js';
 
 export default function IndexPage(){
 
   const {gunUser} = useGun(); // gun.js
   
   function renderPage(){
-    if(!gunUser){
-      return <>
-      <AccessNavBarTop />
-      <Routes>
-        <Route path="/" element={<SignIn />} />
-        <Route path="/signin" element={<SignIn />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/recovery" element={<GetHintPage />} />
-      </Routes>
-    </>
-    }else{
-      return <>
+
+    return <>
       <AccessNavBarTop />
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/recovery" element={<GetHintPage />} />
         <Route path="/account/*" element={<AccountPage />} />
         <Route path="/message/*" element={<MessagePage />} />
         <Route path="/groupchat/*" element={<GroupChat />} />
         <Route path="/chat/*" element={<ChatPage />} />
         <Route path="/graph/*" element={<GraphPage />} />
         <Route path="/signout" element={<SignOut />} />
+        <Route path="/settings/*" element={<SettingsPage />} />
       </Routes>
     </>
-    }
   }
     
   return <>

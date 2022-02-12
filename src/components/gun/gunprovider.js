@@ -43,7 +43,7 @@ export function GunProvider(props){
       }else{
         host=host+"/gun";
       }
-      let gunp = Gun({
+      const gunp = Gun({
         peers:[host]
         , localStorage: false
       });

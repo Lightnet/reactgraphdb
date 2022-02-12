@@ -12,9 +12,18 @@ import {
 } from "react-router-dom";
 import HintPage from "./hint.js";
 import PassphrasePage from "./passphrase.js";
-import ProfilePage from "./profile.js";
+import ProfilePage from "./profilepage.js";
+import { useGun } from "../gun/gunprovider.js";
 
 export default function AccountPage(){
+
+  const { gunUser}=useGun();
+
+  if(!gunUser){
+    return <>
+      <Link to="/signin">Sign In</Link>
+    </>
+  }
 
   return <>
     <div>

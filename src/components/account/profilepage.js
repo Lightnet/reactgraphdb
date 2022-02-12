@@ -12,7 +12,7 @@ import SearchPublicKey from "./searchpublickey.js";
 
 export default function ProfilePage(){
 
-  const {gun}=useGun();
+  const {gun, gunUser}=useGun();
   const {setNotify} = useNotifty();
 
   const refPub = useRef(null);
@@ -24,7 +24,6 @@ export default function ProfilePage(){
   const [skills,setSkills] = useState('');
   const [born,setBorn] = useState('');
   const [location,setLocation] = useState('');
-  
 
   useEffect( async() => {
     if(gun){
@@ -35,7 +34,6 @@ export default function ProfilePage(){
         setPub(pkey);
       }
       
-
       user = gun.user();
       let alias = await user.get('alias').then();
       if(alias){

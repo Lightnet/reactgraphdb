@@ -11,11 +11,11 @@ import {
   Link
 } from "react-router-dom";
 
-import CookiePage from "./cookie.js";
-import StoragePage from "./storage.js";
-import ThemePage from "./theme.js";
+import CookiePage from "./cookiepage.js";
+import StoragePage from "./storagepage.js";
+import ThemePage from "./themepage.js";
 
-export default function AccountPage(){
+export default function SettingsPage(){
 
   return <>
     <div>
@@ -24,6 +24,7 @@ export default function AccountPage(){
       <Link to="storage"> Storage </Link><span> | </span>
     </div>
     <Routes>
+      <Route path="/" element={<ThemePage />} />
       <Route path="theme" element={<ThemePage />} />
       <Route path="cookie" element={<CookiePage />} />
       <Route path="storage" element={<StoragePage />} />

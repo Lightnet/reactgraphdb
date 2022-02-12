@@ -17,8 +17,17 @@ import {
 } from "react-router-dom";
 import ComposeMessage from "./compose.js";
 import InboxMessages from "./inbox.js";
+import { useGun } from "../gun/gunprovider.js";
 
 export default function MessagePage(){
+
+  const {gunUser} = useGun();
+
+  if(!gunUser){
+    return <>
+      <Link to="/signin">Sign In</Link>
+    </>
+  }
 
   return <>
     <div>

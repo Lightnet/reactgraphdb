@@ -14,13 +14,18 @@ import { GunProvider } from './gun/gunprovider.js';
 import { BrowserRouter } from "react-router-dom";
 import IndexPage from './indexpage.js';
 import { NottifyProvider } from './notify/notifyprovider.js';
+import { ThemeProvider } from './theme/themeprovider.js';
 
 export default function MyApp(){
-  return <BrowserRouter> 
-    <GunProvider>
-      <NottifyProvider>
-        <IndexPage />
-      </NottifyProvider>
-    </GunProvider>
-  </BrowserRouter>
+  return (
+  <ThemeProvider>
+    <BrowserRouter> 
+      <GunProvider>
+        <NottifyProvider>
+          <IndexPage />
+        </NottifyProvider>
+      </GunProvider>
+    </BrowserRouter>
+  </ThemeProvider>
+  )
 }

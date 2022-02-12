@@ -10,11 +10,12 @@ import { nanoid32, unixTime } from "../../lib/helper.js";
 import { isEmpty } from '../../lib/helper.js';
 import { nError, nSuccess } from "../notify/notifytype.js";
 import { useNotifty } from "../notify/notifyprovider.js";
+import { Link } from "react-router-dom";
 
 export default function GroupChat(){
 
   //const [chatID, setChatID] = useState('');
-  const {gun} = useGun();
+  const {gun, gunUser} = useGun();
   const {setNotify} = useNotifty();
 
   const [isAdmin, setIsAdmin] = useState(false);
@@ -30,9 +31,14 @@ export default function GroupChat(){
   const [gunGroup, setGunGroup] = useState(null);
   const [groups, setGroups] = useState([]);
 
-
   const [shareKey, setShareKey] = useState('');
   const divScrollRef = useRef(null);
+
+  if(!gunUser){
+    return <>
+      <Link to="/signin">Sign In</Link> 
+    </>
+  }
   
   async function addPrivateChat(index, data){
     let user = gun.user();

@@ -35,7 +35,7 @@
   - message (added)( inbox type / wip)
   - private message (not added )
   - sea tools (fully custom format for export to import for chat message)
-  - theme color (not added)
+  - theme light and dark ( added)
   - notify (added)
   - modal (added / wip)
   - post (not added )
@@ -49,16 +49,16 @@ src
   -server (web server)
   -style (browser)
 .babelrc (babel.js)
-app.js (init server)
+app.js (init web server)
 serverbrowsersync.js ( reload browser watch / not used / package threat)
 watchlivereload.js ( reload browser watch / not used)
-webpack.config.js (watch babel browser client build bundle.js)
+webpack.config.js (watch babel react browser client build bundle.js)
 ```
 
 # guide:
 
 ```
-install nodejs 
+install nodejs 16.x
 ```
 
 

@@ -17,29 +17,21 @@
 import React, { useEffect, useState } from "react";
 import { useGun } from "../gun/gunprovider.js";
 
-function GunGraph({props,gunKey,gunValue,_gun}){
+//gun graph loop to children
+export function GunGraph({props,gunKey,gunValue,_gun}){
 
-  const {gun} = useGun();
-  const [isDisplayJson, setIsDisplayJson] = useState(false);
+  const {gun} = useGun(); // gun global
+  const [isDisplayJson, setIsDisplayJson] = useState(false);// textarea
   const [gValue,setGValue] = useState({});
-  const [gKey,setGKey] = useState('');
-  const [gunNode,setGunNode] = useState({});
+  const [gKey,setGKey] = useState('');//not used
+  const [gunNode,setGunNode] = useState({});//gun node var for gun.get('key')
   const [gunObject,setGunObject] = useState(null);
   const [jsonObject,setJsonObject] = useState([]);
-
   const [isOnce, setIsOnce] = useState(false);
 
 
   useEffect(()=>{
     //console.log('CHECKING::..')
-    /*
-    if(gunKey){
-      setGKey(gunKey);
-      const _g = gun.get(gunKey);
-      setGunNode(_g);
-    }
-    */
-    
     if((gunKey != null)&&(_gun == null)){
       //console.log('TOP')
       let _g = gun.get(gunKey);
@@ -52,12 +44,6 @@ function GunGraph({props,gunKey,gunValue,_gun}){
     
   },[gunKey,_gun])
 
-  //useEffect(()=>{
-    //if(_gun){
-      //setGunNode(_gun)
-    //}
-  //},[_gun])
-
   useEffect(()=>{
     if(gunValue){
       setGValue(JSON.stringify(gunValue))
@@ -69,40 +55,23 @@ function GunGraph({props,gunKey,gunValue,_gun}){
     setIsDisplayJson(b);
     //console.log("displayJson",b);
     if(b){
-      console.log(gunNode);
+      //console.log(gunNode);
       gunNode.once(obj=>{
-        console.log(typeof obj)
+        //console.log(typeof obj)
+        //console.log(obj)
+        //check of null data
         if(!obj){
           setGValue('null')
           return;
         }
-        console.log(obj)
         setGunObject(obj)
-        if(typeof obj == 'object'){
+        //check for type
+        if(typeof obj == 'object'){//object type
           setGValue(JSON.stringify(obj))
-        }else{
+        }else{//string, number, bool covert to text
           setGValue(String(obj))
         }
       })
-
-      /*
-      let obj = await gunNode.once().then(); // does not work when loop in children or load correctly
-      //console.log("OBJ: ",obj)
-      console.log(obj)
-      setGunObject(obj)
-      for (let key in obj) {
-        if (obj.hasOwnProperty(key)) {
-          console.log(key);
-          //__graph.push({key:key,value:obj[key]});
-        }
-      }
-      console.log(typeof obj);
-      if(typeof obj == 'object'){
-        setGValue(JSON.stringify(obj))
-      }else{
-        setGValue(obj)
-      }
-      */
     }
   }
 
@@ -111,12 +80,14 @@ function GunGraph({props,gunKey,gunValue,_gun}){
     setIsOnce(b);
     if(b){
       gunNode.once(obj=>{
+        //check if data is null
         if(!obj){
           return;
         }
-        console.log(obj);
-        console.log(typeof obj);
+        //console.log(obj);
+        //console.log(typeof obj);
         setGunObject(obj)
+        //if object list them into keys 
         if(typeof obj == 'object'){
           let __graph=[]
           for (let key in obj) {
@@ -130,19 +101,6 @@ function GunGraph({props,gunKey,gunValue,_gun}){
           setJsonObject(item=>[...item,{key:obj}]);
         }
       })
-
-      /*
-      let obj = await gunNode.once().then();
-      setGunObject(obj)
-      let __graph=[]
-      for (let key in obj) {
-        if (obj.hasOwnProperty(key)) {
-          //console.log(key);
-          __graph.push({key:key,value:obj[key]});
-        }
-      }
-      setJsonObject(__graph);
-      */
     }
   }
 
@@ -192,8 +150,11 @@ export default function GraphPage(){
   const [graph, setGraph] = useState([]);
 
   useEffect(()=>{
+    console.log("checking gun");
     if(gun){
+      console.log("found gun");
       let _graph = gun._.graph;
+      console.log(_graph);
       let __graph=[]
       for (let key in _graph) {
         if (_graph.hasOwnProperty(key)) {
@@ -205,19 +166,15 @@ export default function GraphPage(){
     }
   },[])
 
-  function clickGetGraph(){
-    console.log(gun);
-    console.log(gun._.graph);
-    console.log(typeof gun._.graph);
-  }
-
-  function clickGraphDB(){
-    console.log(graph)
+  function checkGraph(){
+    if(graph.length==0){
+      return <label> Empty </label>
+    }
+    return <></>
   }
 
   return <>
-    <button onClick={clickGetGraph}> Graph </button>
-    <button onClick={clickGraphDB}> Graph DB </button>
+    {checkGraph()}
     <div>
       {
         graph.map((item)=>{
