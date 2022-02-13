@@ -3,6 +3,8 @@
   Created by: Lightnet
 */
 
+// https://stackoverflow.com/questions/3888902/detect-browser-or-tab-closing
+
 import React,{ createContext, useContext, useEffect, useMemo, useState } from "react";
 import Gun from 'gun/gun.js';
 import SEA from 'gun/sea.js';
@@ -58,9 +60,19 @@ export function GunProvider(props){
       });
       
       gunp.SEA = Gun.SEA;
+      //testing blient online
+      gunp.get('status').get('online').put('on')
 
       setGun(gunp);
-      //setGun(gun);
+
+      //tab close event
+      window.addEventListener("beforeunload", function (e) {
+        var confirmationMessage = "\o/";
+        gunp.get('status').get('online').put('off')
+        (e || window.event).returnValue = confirmationMessage; //Gecko + IE
+        return confirmationMessage;                            //Webkit, Safari, Chrome
+      });
+
     //})
   },[])
 

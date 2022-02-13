@@ -43,6 +43,5 @@ export default function AccessNavBarTop(){
     <ThemeLink /> <span> | </span>
     <Link to="settings">Settings</Link> <span> | </span>
     {isLog}
-    
   </div>
 }

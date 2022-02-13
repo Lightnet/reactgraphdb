@@ -54,7 +54,8 @@ router.get('*', (req, res, next) => {
   
   // respond with html page
   if (req.accepts('html')) {
-    res.redirect(301, '/');
+    //res.redirect(301, '/');
+    res.sendFile(path.join(__dirname, '../index.html'));
     return;
   }
 

@@ -56,12 +56,11 @@ export default function App(){
   //app.enable('trust proxy');
   //app.set('trust proxy', true)
   //app.set('trust proxy', 'loopback') // specify a single subnet
-  //app.set('trust proxy', '127.0.0.1');
-  app.set('trust proxy', function (ip) {
-    console.log("trust proxy: ",ip);
-    if (ip === '127.0.0.1' || ip === '123.123.123.123' || getIPAddress()) return true // trusted IPs
-    else return false
-  })
+  //app.set('trust proxy', function (ip) {
+    //console.log("trust proxy: ",ip);
+    //if (ip === '127.0.0.1' || ip === '123.123.123.123' || getIPAddress()) return true // trusted IPs
+    //else return false
+  //})
 
   app.set('PORT', PORT)
   app.set('HOST', HOST)
@@ -118,5 +117,10 @@ export default function App(){
   gun.on('bye', (peer)=>{// peer disconnect
     //console.log('disconnected from', peer);
     console.log('disconnected from peer!');
+  });
+
+  gun.get('status').on((ack)=>{
+    console.log(ack);
+    console.log(ack.online);
   });
 }

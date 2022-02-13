@@ -45,6 +45,13 @@
   - modal (added / wip)
   - post (not added )
 
+## Tools:
+  To create tools for easy to access to deal with messages to have user have some control to add more encryption.
+  - sea pair ui
+    - 
+  - Crypto Message
+
+
 # Layout:
 ```
 src

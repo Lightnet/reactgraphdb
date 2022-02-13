@@ -21,3 +21,13 @@ const [storageList, setStorageList] = useState([]);
     }, {});
   },[])
 ```
+
+```js
+return Object.keys(pair).reduce(function(obj, str) { 
+  console.log(str)
+  console.log(pair[str])
+  let add = <tr key={str}><td> <label> {str} </label> <input value={pair[str]} readOnly /> </td></tr>
+  return [...obj,add] //add array
+}, []); //<- this is important for array type [], this {} will not work
+
+```
