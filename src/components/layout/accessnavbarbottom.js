@@ -10,6 +10,7 @@
 import React, { useEffect, useState } from "react";
 //import { Link } from "react-router-dom";
 import { useGun } from "../gun/gunprovider.js";
+import ClockTime from "../utility/clocktime.js";
 
 export default function AccessNavBarBottom(){
   const [isLog, setIsLog] = useState(<></>);
@@ -41,6 +42,7 @@ export default function AccessNavBarBottom(){
     <a href="#"> Tool </a> <span> | </span>
     <a href="#" onClick={clickToolSeaPair}> Tool Sea Pair </a> <span> | </span>
     <a href="#" onClick={clickToolCryptoMessage}> Tool Crypto Message </a> <span> | </span>
+    <ClockTime />
   </div>
   )
 }

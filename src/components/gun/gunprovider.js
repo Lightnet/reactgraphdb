@@ -38,7 +38,7 @@ export function GunProvider(props){
       //gun = Gun('http://localhost:3000/gun');
       
       //let gunp = Gun();
-      console.log(location)
+      //console.log(location)
       let host = location.origin;
       if(location.host=='localhost'){
         host='http://localhost/gun';

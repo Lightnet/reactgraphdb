@@ -31,12 +31,13 @@ import AccessNavBarBottom from './layout/accessnavbarbottom.js';
 import ToolSeaPanel from './tools/toolseapanel.js';
 import useEvent from './hook/useevent.js';
 import ToolCryptoMessage from './tools/toolcryptomessage.js';
+import NotFoundPage from './utility/notfoundpage.js';
 
 export default function IndexPage(){
 
   const {gunUser} = useGun(); // gun.js
   const [isToolPair, setIsToolPair] = useState(false);
-  const [isToolCryptoMessage, setIsToolCryptoMessage] = useState(false);
+  const [isToolCryptoMessage, setIsToolCryptoMessage] = useState(true);
 
   function toggleToolSeaPair(){
     setIsToolPair(state=>!state);
@@ -69,6 +70,7 @@ export default function IndexPage(){
         <Route path="/graph/*" element={<GraphPage />} />
         <Route path="/signout" element={<SignOut />} />
         <Route path="/settings/*" element={<SettingsPage />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <AccessNavBarBottom />
       <ToolSeaPanel isopen={isToolPair} closeModal={closeToolSeaPair}/>

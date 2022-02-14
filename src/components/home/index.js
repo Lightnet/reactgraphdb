@@ -4,6 +4,7 @@
 */
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import ModalTest from '../modal/modeltest.js';
 import NotiftyTest from '../notify/notiftytest.js';
 //import { useNotifty } from '../notify/notifyprovider.js';
@@ -13,8 +14,10 @@ export default function HomePage(){
 
 
   return <>
-    <label>HomePage!</label>
-    <ModalTest />
+    <label>HomePage!</label><br />
+    <Link to="/signin">Sign In</Link> <br />
+
+    <ModalTest /><br />
     
     <NotiftyTest />
   </>

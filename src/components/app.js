@@ -17,6 +17,7 @@ import { NottifyProvider } from './notify/notifyprovider.js';
 import { ThemeProvider } from './theme/themeprovider.js';
 
 export default function MyApp(){
+  
   return (
   <ThemeProvider>
     <BrowserRouter> 
