@@ -10,8 +10,7 @@ import { Link, useNavigate  } from "react-router-dom";
 
 import React, { useEffect, useState } from "react";
 import { useGun } from "../gun/gunprovider.js";
-import { nError, nSuccess } from "../notify/notifytype.js";
-import { useNotifty } from "../notify/notifyprovider.js";
+import { useNotifty, Color } from "../notify/notifyprovider.js";
 import {isEmpty} from "../../lib/helper.js"
 
 
@@ -22,7 +21,7 @@ export default function SignIn(){
   } = useGun();
 
   const navigate = useNavigate();
-  const {setNotify} = useNotifty();
+  const {dispatchNotify} = useNotifty();
 
   const [accessType, setAccessType] = useState('default');
   const [bPair, setBPair] = useState(false);
@@ -78,11 +77,19 @@ export default function SignIn(){
         setStatus('');
         if(ack.err){
           //setStatus(ack.err);
-          setNotify(nError(ack.err,true ))
+          dispatchNotify({
+            type: 'add'
+            , color: Color.error
+            , children: ack.err
+          })
           return;
         }
         //setStatus('');
-        setNotify(nSuccess( "Signin Pass!",true ))
+        dispatchNotify({
+          type: 'add'
+          , color: Color.success
+          , children: "Signin Pass!"
+        })
         let user0 = gun.user();
         console.log(user0)
         setGunUser(user0.is);
@@ -111,11 +118,19 @@ export default function SignIn(){
       setStatus('');
       if(ack.err){
         //setStatus(ack.err);
-        setNotify(nError(ack.err,true ))
+        dispatchNotify({
+          type: 'add'
+          , color: Color.error
+          , children: ack.err
+        })
         return;
       }
 
-      setNotify(nSuccess( "Signin Pass!",true ))
+      dispatchNotify({
+        type: 'add'
+        , color: Color.success
+        , children: "Signin Pass!"
+      })
 
       //setStatus('');
       let user0 = gun.user();
@@ -162,11 +177,19 @@ export default function SignIn(){
       setStatus('');
       if(ack.err){
         //setStatus(ack.err);
-        setNotify(nError(ack.err,true ))
+        dispatchNotify({
+          type: 'add'
+          , color: Color.error
+          , children: ack.err
+        })
         return;
       }
       //setStatus('');
-      setNotify(nSuccess( "Signin Pass!",true ))
+      dispatchNotify({
+        type: 'add'
+        , color: Color.success
+        , children: "Signin Pass!"
+      })
       let user0 = gun.user();
       console.log(user0)
       setUser(user0.is);

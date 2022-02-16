@@ -8,15 +8,16 @@ import { useGun } from "../gun/gunprovider.js";
 //import Gun from 'gun/gun.js';
 import { nanoid32, unixTime } from "../../lib/helper.js";
 import { isEmpty } from '../../lib/helper.js';
-import { nError, nSuccess } from "../notify/notifytype.js";
-import { useNotifty } from "../notify/notifyprovider.js";
+
 import { Link } from "react-router-dom";
+
+import { useNotifty,Color } from "../notify/notifyprovider.js";
 
 export default function GroupChat(){
 
   //const [chatID, setChatID] = useState('');
   const {gun, gunUser} = useGun();
-  const {setNotify} = useNotifty();
+  const {dispatchNotify} = useNotifty();
 
   const [isAdmin, setIsAdmin] = useState(false);
   const [isRoom, setisRoom] = useState(false);
@@ -165,7 +166,11 @@ export default function GroupChat(){
     //console.log(gkey);
     if(gkey == undefined){
       console.log("NOT FOUND!");
-      setNotify(nError("GroupChat ID Not Found!",true ));
+      dispatchNotify({
+        type: 'add'
+        , color: Color.error
+        , children: "GroupChat ID Not Found!"
+      })
       return;
     }
     let guninfo = gun.get(privatekey).get('info');
@@ -180,7 +185,11 @@ export default function GroupChat(){
         description:description,
         date:date
     });
-    setNotify(nSuccess( "Group Chat Added!!",true ));
+    dispatchNotify({
+      type: 'add'
+      , color: Color.success
+      , children: "Group Chat Added!!"
+    })
   }
 
   async function removeGroupChat(){
@@ -195,7 +204,11 @@ export default function GroupChat(){
       return;
     }
     user.get('groupchat').get(privatekey).put(null);
-    setNotify(nSuccess( "Group Chat Delete!!",true ));
+    dispatchNotify({
+      type: 'add'
+      , color: Color.success
+      , children: "Group Chat Delete!"
+    })
   }
 
   // https://github.com/Lightnet/gunjstrustsharekey/blob/master/client.js Line:1042
@@ -244,6 +257,12 @@ export default function GroupChat(){
         description:pdescription,
         date:unixTime()
       });
+
+      dispatchNotify({
+        type: 'add'
+        , color: Color.success
+        , children: "Group Chat Create!" + genGroupKey
+      })
 
   }
 
@@ -299,7 +318,12 @@ export default function GroupChat(){
     //console.log(dec);
     if(dec==null){
       console.log("NULL SHARE KEY!");
-      setNotify(nError("NULL SHARE KEY!",true ));
+      dispatchNotify({
+        type: 'add'
+        , color: Color.error
+        , children: "NULL SHARE KEY!"
+      })
+
       setisRoom(false);
       return;
     }
@@ -353,7 +377,11 @@ export default function GroupChat(){
     let groupKey = (groupID || "").trim();
     if(isEmpty(groupKey)){
       //console.log("EMPTY groupKey");
-      setNotify(nError("GroupChat ID Empty!",true ));
+      dispatchNotify({
+        type: 'add'
+        , color: Color.error
+        , children: "GroupChat ID Empty!"
+      })
       return;
     }
     let pkey = shareKey;
@@ -361,7 +389,11 @@ export default function GroupChat(){
     let pubKey = (publicKey || "").trim();
     if(isEmpty(pubKey)){
       //console.log("EMPTY pubKey");
-      setNotify(nError("Public Key Empty!",true ));
+      dispatchNotify({
+        type: 'add'
+        , color: Color.error
+        , children: "Public Key Empty!"
+      })
       return;
     }
     let pownid = await gun.get(groupID).get('info').get('pub').then();
@@ -397,7 +429,12 @@ export default function GroupChat(){
     let groupKey = (groupID || "").trim();
     if(isEmpty(groupKey)){
       //console.log("EMPTY groupKey");
-      setNotify(nError("GroupChat ID Empty!",true ));
+      dispatchNotify({
+        type: 'add'
+        , color: Color.error
+        , children: "GroupChat ID Empty!"
+      })
+      
       return;
     }
     let pkey = (shareKey || "").trim();
@@ -405,7 +442,11 @@ export default function GroupChat(){
     let pubKey = (publicKey || "").trim();
     if(isEmpty(pubKey)){
       console.log("EMPTY pubKey");
-      setNotify(nError("Public Key Empty!",true ));
+      dispatchNotify({
+        type: 'add'
+        , color: Color.error
+        , children: "Public Key Empty!"
+      })
       return;
     }
 
@@ -432,7 +473,11 @@ export default function GroupChat(){
         .get(pub).put(null);
     console.log(pkey);
     console.log("finish revoke!");
-    setNotify(nSuccess( "Revoke Public Key!"+pkey,true ))
+    dispatchNotify({
+      type: 'add'
+      , color: Color.success
+      , children: "Revoke Public Key!"+pkey
+    })
 
   }
 

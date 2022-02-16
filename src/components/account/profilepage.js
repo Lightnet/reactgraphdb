@@ -5,17 +5,15 @@
 
 import React,{ useState, useEffect, useRef } from "react";
 import { useGun } from "../gun/gunprovider.js";
-
-import { useNotifty } from "../notify/notifyprovider.js";
-import { nSuccess, nWarning } from "../notify/notifytype.js";
 import PublicKey from "./publickey.js";
 import SeaPair from "./seapair.js";
 import SearchPublicKey from "./searchpublickey.js";
+import { useNotifty, Color } from "../notify/notifyprovider.js";
 
 export default function ProfilePage(){
 
   const {gun, gunUser}=useGun();
-  const {setNotify} = useNotifty();
+  const {dispatchNotify} = useNotifty();
 
   const [alias,setAlias] = useState('');
   const [information,setInformation] = useState('');

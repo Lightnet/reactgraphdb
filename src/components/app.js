@@ -13,7 +13,7 @@ import React from 'react';
 import { GunProvider } from './gun/gunprovider.js';
 import { BrowserRouter } from "react-router-dom";
 import IndexPage from './indexpage.js';
-import { NottifyProvider } from './notify/notifyprovider.js';
+import { NotifyProvider } from './notify/notifyprovider.js';
 import { ThemeProvider } from './theme/themeprovider.js';
 
 export default function MyApp(){
@@ -22,9 +22,9 @@ export default function MyApp(){
   <ThemeProvider>
     <BrowserRouter> 
       <GunProvider>
-        <NottifyProvider>
+        <NotifyProvider>
           <IndexPage />
-        </NottifyProvider>
+        </NotifyProvider>
       </GunProvider>
     </BrowserRouter>
   </ThemeProvider>

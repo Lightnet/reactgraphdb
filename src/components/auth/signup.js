@@ -6,12 +6,11 @@
 import { Link } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { useGun } from "../gun/gunprovider.js";
-import { nError, nSuccess } from "../notify/notifytype.js";
-import { useNotifty } from "../notify/notifyprovider.js";
+import { useNotifty, Color } from "../notify/notifyprovider.js";
 
 export default function SignUp(){
   const {gun} = useGun();
-  const {setNotify} = useNotifty();
+  const {dispatchNotify} = useNotifty();
 
   const [status, setStatus] = useState('');
 
@@ -38,18 +37,22 @@ export default function SignUp(){
       console.log(ack)
       if(ack.err){
         //setStatus(ack.err);
-        //if(ack.err=="User already created!"){
-          //console.log('EXIST');
-          //setStatus(ack.err);
-        //}
-        setNotify(nError(ack.err,true ))
+        dispatchNotify({
+          type: 'add'
+          , color: Color.error
+          , children: ack.err
+        })
         return;
       }
       if(ack.ok){
         //console.log('PASS')
         //setStatus("CREATE");
       }
-      setNotify(nSuccess( "Signin Pass!",true ))
+      dispatchNotify({
+        type: 'add'
+        , color: Color.success
+        , children: "Created Pass!"
+      })
     })
 
     /*

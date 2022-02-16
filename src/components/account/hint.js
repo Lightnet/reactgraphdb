@@ -10,12 +10,11 @@
 import React, { useEffect, useState } from "react";
 import { useGun } from "../gun/gunprovider.js";
 
-import { useNotifty } from "../notify/notifyprovider.js";
-import { nError, nSuccess, nWarning } from "../notify/notifytype.js";
+import { useNotifty, Color } from "../notify/notifyprovider.js";
 
 export default function HintPage(){
 
-  const {setNotify} = useNotifty();
+  const {dispatchNotify} = useNotifty();
   const {gun}=useGun();
 
   const [question1, setQuestion1] = useState('');
@@ -74,13 +73,21 @@ export default function HintPage(){
       //console.log(ack);
       if(ack.err){
           //console.log("Error!");
-          setNotify(nError("Hint Error",true));
+          dispatchNotify({
+            type: 'add'
+            , color: Color.error
+            , children: "Hint Error"
+          })
           //modalmessage(ack.err);
           return;
       }
       if(ack.ok){
           //console.log('Hint Apply!');
-          setNotify(nSuccess("Hint Apply",true));
+          dispatchNotify({
+            type: 'add'
+            , color: Color.success
+            , children: "Hint Apply"
+          })
           //modalmessage('Hint Apply!');
       }
     });

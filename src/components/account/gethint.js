@@ -5,12 +5,12 @@
 
 import React, { useEffect, useState } from "react";
 import { useGun } from "../gun/gunprovider.js";
-import { useNotifty } from "../notify/notifyprovider.js";
-import { nSuccess, nWarning } from "../notify/notifytype.js";
+import { useNotifty, Color } from "../notify/notifyprovider.js";
 
 export default function GetHintPage(){
 
-  const {setNotify} = useNotifty();
+  const {dispatchNotify} = useNotifty();
+
   const {gun}=useGun();
 
   const [alias, setAlias] = useState('');
@@ -35,8 +35,11 @@ export default function GetHintPage(){
     if(gun){
       let user = await gun.get('~@'+alias).then();
       if(!user){
-        //console.log("publickey");
-        setNotify(nWarning("Does not Exist!",true ))
+        dispatchNotify({
+          type: 'add'
+          , color: Color.error
+          , children: "Does not Exist!"
+        })
         return;
       }
       let publickey;
@@ -60,10 +63,18 @@ export default function GetHintPage(){
       if(ehint !=null){//check if hint is string or null
         //$('#fhint').val(hint);
         setHint(ehint);
-        setNotify(nSuccess("Pass Decrypt!",true ))
+        dispatchNotify({
+          type: 'add'
+          , color: Color.success
+          , children: "Pass Decrypt!"
+        })
       }else{
         //modalmessage("Fail Decrypt!");
-        setNotify(nWarning("Fail Decrypt!",true ))
+        dispatchNotify({
+          type: 'add'
+          , color: Color.warning
+          , children: "Fail Decrypt!"
+        })
       }
       //console.log(gun.SEA);
     }
