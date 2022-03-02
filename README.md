@@ -47,24 +47,22 @@
 
 ## Tools:
   To create tools for easy to access to deal with messages to have user have some control to add more encryption.
-  - sea pair ui
-    - 
-  - Crypto Message
-
+  - SEA pair UI
+  - Crypto Message types
 
 # Layout:
 ```
 src
   -client ( browser ) 
-  -components (react.js / gun.js / browser)
-  -lib (helper / database / browser / server)
-  -server (web server)
-  -style (browser)
-.babelrc (babel.js)
-app.js (init web server)
-serverbrowsersync.js ( reload browser watch / not used / package threat)
-watchlivereload.js ( reload browser watch / not used)
-webpack.config.js (watch babel react browser client build bundle.js)
+  -components ( react.js / gun.js / browser )
+  -lib ( helper / database / browser / server )
+  -server ( web server )
+  -style ( browser)
+.babelrc ( babel.js )
+app.mjs ( init web server )
+serverbrowsersync.js ( reload browser watch / not used )
+watchlivereload.js ( reload browser watch / not used )
+webpack.config.mjs ( watch babel react browser client build bundle.js )
 ```
 
 # Guide:
@@ -102,14 +100,14 @@ npm run dev
 App.js entry point
 ```js
 import React from 'react';
-import { GunProvider } from './components/gun/gunprovider.js';
+import { GunProvider } from './components/gun/GunProvider.jsx';
 import { BrowserRouter } from "react-router-dom";
-import IndexPage from './components/indexpage.js';
+import RoutePage from './components/RoutePage.jsx';
 
 export default function MyApp(){
   return <BrowserRouter> 
     <GunProvider>
-      <IndexPage />
+      <RoutePage />
     </GunProvider>
   </BrowserRouter>
 }
@@ -123,7 +121,7 @@ export default function MyApp(){
 </BrowserRouter>
 ```
 
-gunprovider.js for gun.js setup for global access
+GunProvider.jsx for gun.js setup for global access
 ```js
 import React,{ createContext, useContext, useEffect, useMemo, useState } from "react";
 import Gun from 'gun/gun.js';
@@ -172,7 +170,7 @@ export function GunProvider(props){
 
 blank.js To access gun instance.
 ```js
-import { useGun } from './gun/gunprovider.js';
+import { useGun } from './gun/GunProvider.jsx';
 
 export default function BlankPage(){
   const {gun, gunUser} = useGun(); // gun.js for react format

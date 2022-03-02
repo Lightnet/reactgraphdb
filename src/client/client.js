@@ -11,7 +11,7 @@ console.log('Start React:',0);
 import Style from '../style/globals.css'
 import React from 'react';
 import ReactDOM from 'react-dom';
-import MyApp from "../components/app.js";
+import MyApp from "../components/App.jsx";
 
 /*
 import Gun from 'gun/gun';
