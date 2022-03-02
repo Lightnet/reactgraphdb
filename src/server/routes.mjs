@@ -23,7 +23,7 @@ const router = Router();
 router.get('/', (req, res, next) => {
   //res.setHeader('Access-Control-Allow-Origin', '*');
   //res.send('Hello, World!');
-  res.sendFile(path.join(__dirname, '../index.html'));
+  res.sendFile(path.join(__dirname, '../client/index.html'));
   //next();
 });
 
